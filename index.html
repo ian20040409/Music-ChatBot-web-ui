@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音樂知識問答精靈</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 內嵌 CSS -->
+    <link rel="stylesheet" href="https://raw.githubusercontent.com/ian20040409/Music-ChatBot-web-ui/refs/heads/main/style.css">
+    <style>
+        body {
+            font-family: 'Poppins', 'Noto Sans TC', sans-serif;
+            /* 將 background-color 換成背景色漸層 */
+            background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .chat-container-wrapper {
+            width: 100%;
+            max-width: 750px;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background-color: rgba(221, 221, 221, 0.404);
+            backdrop-filter: blur(100px);
+            overflow: hidden;
+        }
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: rgb(255, 255, 255);
+            border-bottom: none;
+            padding: 1.5rem;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        .card-header h1 {
+            font-weight: 600;
+            font-size: 1.75rem;
+        }
+        .card-body {
+            padding: 2rem;
+        }
+        .qa-type-selector {
+            margin-bottom: 1.5rem;
+            padding: 0.75rem;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+        .qa-type-selector .form-check-input:checked {
+            background-color: #667eea;
+            border-color: #667eea;
+        }
+        .qa-type-selector .form-check-label {
+            font-weight: 500;
+            color: #495057;
+        }
+        .input-group .form-control {
+            border-radius: 10px 0 0 10px;
+            border: 1px solid #ced4da;
+            padding: 0.9rem 1rem;
+            font-size: 1rem;
+        }
+        .input-group .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+        }
+        .input-group .btn {
+            border-radius: 0 10px 10px 0;
+            background-color: #667eea;
+            border-color: #667eea;
+            padding: 0.9rem 1.25rem;
+            font-weight: 500;
+        }
+        .input-group .btn:hover {
+            background-color: #5a6fd0;
+            border-color: #5a6fd0;
+        }
+        .input-group .btn:disabled {
+            background-color: #adb5bd;
+            border-color: #adb5bd;
+        }
+        .chat-area {
+            height: 400px;
+            overflow-y: auto;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background-color: rgba(248, 249, 250, 0.459);
+            backdrop-filter: blur(8px);
+            border-radius: 10px;
+        }
+        /* Custom scrollbar for webkit browsers */
+        .chat-area::-webkit-scrollbar {
+            width: 8px;
+        }
+        .chat-area::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .chat-area::-webkit-scrollbar-thumb {
+            background: #adb5bd;
+            border-radius: 10px;
+        }
+        .chat-area::-webkit-scrollbar-thumb:hover {
+            background: #868e96;
+        }
+        .message-wrapper {
+            margin-bottom: 1rem;
+            display: flex;
+        }
+        .message-wrapper.user {
+            justify-content: flex-end;
+        }
+        .message-wrapper.bot {
+            justify-content: flex-start;
+        }
+        .message {
+            padding: 0.8rem 1.2rem;
+            border-radius: 15px;
+            max-width: 80%;
+            word-wrap: break-word;
+            line-height: 1.6;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .message.user-message {
+            background-color: #667eea;
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+        .message.user-message strong {
+            color: #e0e0e0;
+        }
+        .message.bot-message {
+            background-color: #ffffff;
+            color: #343a40;
+            border: 1px solid #e9ecef;
+            border-bottom-left-radius: 5px;
+        }
+        .message.bot-message strong {
+            color: #667eea;
+        }
+        .loading-message, .error-message {
+            font-style: italic;
+            color: #6c757d;
+            padding: 0.5rem 0;
+        }
+        .error-message {
+            color: #d9534f;
+            font-weight: 500;
+        }
+        .message-timestamp {
+            font-size: 0.75rem;
+            color: #adb5bd;
+            margin-top: 0.3rem;
+            display: block;
+        }
+        .user-message + .message-timestamp {
+            text-align: right;
+        }
+        .bot-message + .message-timestamp {
+            text-align: left;
+        }
+
+        /* 動態邊框色彩動畫 (這個 @keyframes 保留不變) */
+        @keyframes borderShift {
+                0%   { border-image-source: linear-gradient(0deg,   #e0c3fc, #8ec5fc); } /* 背景色1, 背景色2 */
+                25%  { border-image-source: linear-gradient(90deg,  #8ec5fc, #e0c3fc); } /* 背景色2, 背景色1 (可交換順序增加動態感) */
+                50%  { border-image-source: linear-gradient(180deg, #e0c3fc, #8ec5fc); } /* 背景色1, 背景色2 */
+                75%  { border-image-source: linear-gradient(270deg, #8ec5fc, #e0c3fc); } /* 背景色2, 背景色1 */
+                100% { border-image-source: linear-gradient(360deg, #e0c3fc, #8ec5fc); } /* 背景色1, 背景色2 */
+                }
+
+                /* 新增：定義 body::before 的基本樣式，用於淡入淡出和圓角 */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none; /* 允許點擊穿透 */
+  border: 7px solid transparent; /* 邊框樣式，顏色由 border-image 控制 */
+  border-image-slice: 1;
+  border-radius: 150px; /* 加入圓角，您可以調整此數值 */
+  opacity: 0; /* 初始狀態為透明，用於淡入 */
+  transition: opacity 0.7s ease-in-out; /* 淡入淡出動畫時間，您可以調整此數值 */
+  z-index: 9999; /* 確保在最上層 */
+}
+
+/* 修改：body.thinking::before 狀態，觸發動畫和顯示 */
+body.thinking::before {
+  opacity: 1; /* 淡入到完全顯示 */
+  animation: borderShift 8s linear infinite; /* 動畫變慢 (例如 8 秒)，您可以調整此數值 */
+  border-radius: 150px; /* 四角圓角 */
+  /* border-image-source 由 @keyframes borderShift 動畫提供 */
+}
+
+    </style>
+</head>
+<body>
+    <div class="chat-container-wrapper">
+        <div class="card">
+            <div class="card-header text-center">
+                <h1 class="mb-0"><i class="fas fa-music me-2"></i>音樂知識問答精靈</h1>
+            </div>
+            <div class="card-body">
+                <div class="qa-type-selector text-center">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="qaType" id="ragType" value="rag" checked>
+                        <label class="form-check-label" for="ragType">
+                            <i class="fas fa-book-open me-1"></i> RAG (知識庫)
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="qaType" id="localType" value="local">
+                        <label class="form-check-label" for="localType">
+                            <i class="fas fa-brain me-1"></i> 本地模型
+                        </label>
+                    </div>
+                </div>
+
+                <div class="chat-area" id="chatArea">
+                    <!-- Welcome Message -->
+                    <div class="message-wrapper bot">
+                        <div class="message bot-message">
+                            <strong>音樂精靈：</strong> 你好！有什麼音樂方面的問題想問我嗎？ 🎵
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group mt-3">
+                    <input type="text" id="questionInput" class="form-control" placeholder="在這裡輸入您的問題...">
+                    <button id="sendButton" class="btn btn-primary" type="button">
+                        <i class="fas fa-paper-plane me-1"></i> 發送
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://raw.githubusercontent.com/ian20040409/Music-ChatBot-web-ui/refs/heads/main/style.css"></script>
+  
+</body>
+</html>
