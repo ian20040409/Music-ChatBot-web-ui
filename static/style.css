@@ -1,73 +1,302 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>音樂知識問答精靈</title>
-    <link rel="icon" href="static/favicon.png" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="static/style.css">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"/>
+/* 頁面整體樣式設定 */
+body {
+    font-family: 'Poppins', 'Noto Sans TC', sans-serif; /* 設定字體，優先使用 Poppins，其次 Noto Sans TC，最後是無襯線字體 */
+    background: linear-gradient(135deg, #e0c3fc, #8ec5fc); /* 設定背景為由 #e0c3fc 到 #8ec5fc 的 135 度線性漸層 */
+    display: flex; /* 使用 Flexbox 佈局 */
+    justify-content: center; /* 水平置中對齊子項目 */
+    align-items: center; /* 垂直置中對齊子項目 */
+    min-height: 100vh; /* 最小高度為視窗高度的 100% */
+    padding: 1rem; /* 內邊距為 1rem */
+}
+
+/* 聊天容器外層 */
+.chat-container-wrapper {
+    width: 100%; /* 寬度為父容器的 100% */
+    max-width: 750px; /* 最大寬度為 750px */
+}
+
+/* 卡片樣式 */
+.card {
+    border: none; /* 無邊框 */
+    border-radius: 15px; /* 邊框圓角為 15px */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* 設定陰影效果 */
+    background-color: rgba(221, 221, 221, 0.404); /* 背景顏色，帶有透明度 */
+    backdrop-filter: blur(100px); /* 背景毛玻璃效果，模糊半徑 100px */
+    overflow: hidden; /* 超出部分隱藏 */
+}
+
+/* 卡片頭部樣式 */
+.card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* 背景為由 #667eea 到 #764ba2 的 135 度線性漸層 */
+    color: rgb(255, 255, 255); /* 文字顏色為白色 */
+    border-bottom: none; /* 無底部邊框 */
+    padding: 1.5rem; /* 內邊距為 1.5rem */
+    border-top-left-radius: 15px; /* 左上角邊框圓角為 15px */
+    border-top-right-radius: 15px; /* 右上角邊框圓角為 15px */
+}
+
+/* 卡片頭部標題 h1 樣式 */
+.card-header h1 {
+    font-weight: 600; /* 字體粗細為 600 (semibold) */
+    font-size: 1.75rem; /* 字體大小為 1.75rem */
+}
+
+/* 卡片主體樣式 */
+.card-body {
+    padding: 2rem; /* 內邊距為 2rem */
+}
+
+/* 問答類型選擇器樣式 */
+.qa-type-selector {
+    margin-bottom: 1.5rem; /* 底部外邊距為 1.5rem */
+    padding: 0.75rem; /* 內邊距為 0.75rem */
+    background-color: #f8f9fa; /* 背景顏色 */
+    border-radius: 10px; /* 邊框圓角為 10px */
+}
+
+/* 問答類型選擇器中被選中的選項輸入框樣式 */
+.qa-type-selector .form-check-input:checked {
+    background-color: #667eea; /* 背景顏色 */
+    border-color: #667eea; /* 邊框顏色 */
+}
+
+/* 問答類型選擇器中選項標籤樣式 */
+.qa-type-selector .form-check-label {
+    font-weight: 500; /* 字體粗細為 500 (medium) */
+    color: #495057; /* 文字顏色 */
+}
+
+/* 輸入框群組中的表單控制項（輸入框）樣式 */
+.input-group .form-control {
+    border-radius: 10px 0 0 10px; /* 左上和左下邊框圓角為 10px，右上和右下為 0 */
+    border: 1px solid #ced4da; /* 邊框樣式 */
+    padding: 0.9rem 1rem; /* 內邊距 */
+    font-size: 1rem; /* 字體大小 */
+}
+
+/* 輸入框群組中的表單控制項（輸入框）獲得焦點時的樣式 */
+.input-group .form-control:focus {
+    border-color: #667eea; /* 邊框顏色 */
+    box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25); /* 焦點時的陰影效果 */
+}
+
+/* 輸入框群組中的按鈕樣式 */
+.input-group .btn {
+    border-radius: 0 10px 10px 0; /* 右上和右下邊框圓角為 10px，左上和左下為 0 */
+    background-color: #667eea; /* 背景顏色 */
+    border-color: #667eea; /* 邊框顏色 */
+    padding: 0.9rem 1.25rem; /* 內邊距 */
+    font-weight: 500; /* 字體粗細為 500 (medium) */
+}
+
+/* 輸入框群組中的按鈕懸停時的樣式 */
+.input-group .btn:hover {
+    background-color: #5a6fd0; /* 背景顏色 */
+    border-color: #5a6fd0; /* 邊框顏色 */
+}
+
+/* 輸入框群組中的按鈕禁用時的樣式 */
+.input-group .btn:disabled {
+    background-color: #adb5bd; /* 背景顏色 */
+    border-color: #adb5bd; /* 邊框顏色 */
+}
+
+/* 建議提示詞容器樣式 */
+.suggested-prompts {
+    display: flex; /* 使用 Flexbox 佈局 */
+    flex-wrap: wrap; /* 允許子項目換行 */
+    gap: 0.5rem; /* 子項目之間的間距 */
+}
+
+/* 建議提示詞按鈕樣式 */
+.suggested-prompts button {
+    color: #343a40;  
+    position: relative; /* 相對定位，為偽元素定位提供基準 */
+    display: inline-block; /* 內聯塊級元素 */
+    padding: 0.4rem 0.8rem; /* 內邊距 */
+    font-size: 0.9rem; /* 字體大小 */
+    cursor: pointer; /* 滑鼠指標為手型 */
+    border: none; /* 無邊框 */
+    border-radius: 20px; /* 邊框圓角為 20px */
+    background-color: #e9ecef; /* 背景顏色 */
+    overflow: hidden; /* 超出部分隱藏，用於偽元素的邊框效果 */
+    z-index: 1; /* 堆疊順序，確保內容在最上層 */
+    animation: fadeInUp 0.4s ease forwards; /* 應用 fadeInUp 入場動畫，持續 0.4 秒，緩動效果，並停在最後一幀 */
+    transition: transform .3s ease, box-shadow .3s ease; /* 設定 transform 和 box-shadow 的過渡效果 */
+}
+
+/* 建議提示詞按鈕的偽元素 (::before)，用於創建漸層邊框 */
+.suggested-prompts button::before {
+    content: ""; /* 偽元素必須有 content 屬性 */
+    position: absolute; /* 絕對定位，相對於按鈕 */
+    top: -2px;    /* 向上偏移 2px (模擬邊框寬度) */
+    left: -2px;   /* 向左偏移 2px */
+    right: -2px;  /* 向右偏移 2px */
+    bottom: -2px; /* 向下偏移 2px */
+    background: linear-gradient(45deg, #c3e1f6, #fbe8db, #d3c4f7); /* 背景為 45 度線性漸層 */
+    border-radius: calc(20px + 2px); /* 圓角等於原按鈕圓角加上邊框寬度 */
+    z-index: -1;  /* 堆疊順序，放到按鈕背景下方 */
+    /* animation: gradientBorder 6s linear infinite; (如果想要動態變色，則取消此註解並定義 gradientBorder 動畫) */
+}
+
+/* 定義 fadeInUp 入場動畫：淡入並向上移動 */
+@keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(10px); } /* 動畫開始時：透明，向下偏移 10px */
+    100% { opacity: 1; transform: translateY(0); } /* 動畫結束時：完全不透明，回到原位 */
+}
+
+/* （可選）邊框漸層動畫 (此處未啟用，但保留了 gradientBorder 的可能性) */
+/* @keyframes gradientBorder { ... } */
 
 
-    
-</head>
-<body>
-    <div class="chat-container-wrapper">
-        <div class="card">
-            <div class="card-header text-center">
-                <h1 class="mb-0"><i class="fas fa-music me-2"></i>音樂知識問答精靈</h1>
-            </div>
-            <div class="card-body">
-                <div class="qa-type-selector text-center">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="qaType" id="ragType" value="rag" checked>
-                        <label class="form-check-label" for="ragType">
-                            <i class="fas fa-book-open me-1"></i> RAG 音樂知識庫
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="qaType" id="localType" value="local">
-                        <label class="form-check-label" for="localType">
-                            <i class="fas fa-brain me-1"></i> 本地模型
-                        </label>
-                    </div>
-                </div>
+/* 建議提示詞按鈕懸停效果：放大並添加陰影 */
+.suggested-prompts button:hover {
+    transform: scale(1.08); /* 放大 1.08 倍 */
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2); /* 添加陰影 */
+}
 
-                <div class="chat-area" id="chatArea">
-                    <div class="message-wrapper bot">
-                        <div class="message bot-message">
-                            <strong>音樂精靈：</strong> 你好！有什麼音樂方面的問題想問我嗎？ 🎵
-                        </div>
-                    </div>
-                </div>
-                <div class="suggested-prompts mt-2" id="suggestedPrompts"></div>
-                <form id="questionForm" class="input-group mt-3">
-                    
-                    
-                    <input type="text" id="questionInput" class="form-control" placeholder="在這裡輸入您的問題..." required>
-                    <div class="invalid-feedback">
-                        請輸入您的問題。
-                    </div>
-                    <button id="sendButton" class="btn btn-primary" type="submit">
-                        <i class="fas fa-paper-plane me-1"></i> 發送
-                    </button>
-                    
+/* 聊天區域樣式 */
+.chat-area {
+    height: 400px; /* 固定高度為 400px */
+    overflow-y: auto; /* 內容超出時垂直方向顯示滾動條 */
+    padding: 1rem; /* 內邊距 */
+    margin-bottom: 1rem; /* 底部外邊距 */
+    background-color: rgba(248, 249, 250, 0.459); /* 背景顏色，帶有透明度 */
+    backdrop-filter: blur(8px); /* 背景毛玻璃效果，模糊半徑 8px */
+    border-radius: 10px; /* 邊框圓角為 10px */
+}
 
-                </form>
-            </div>
-        </div>
-    </div>
+/* Webkit 核心瀏覽器（如 Chrome, Safari）的自訂滾動條樣式 */
+.chat-area::-webkit-scrollbar {
+    width: 8px; /* 滾動條寬度 */
+}
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="static/app.js"></script>
-    <script>
-       
-    </script>
-</body>
-</html>
+/* Webkit 核心瀏覽器的自訂滾動條軌道樣式 */
+.chat-area::-webkit-scrollbar-track {
+    background: #f1f1f1; /* 軌道背景顏色 */
+    border-radius: 10px; /* 軌道邊框圓角 */
+}
+
+/* Webkit 核心瀏覽器的自訂滾動條滑塊樣式 */
+.chat-area::-webkit-scrollbar-thumb {
+    background: #adb5bd; /* 滑塊背景顏色 */
+    border-radius: 10px; /* 滑塊邊框圓角 */
+}
+
+/* Webkit 核心瀏覽器的自訂滾動條滑塊懸停時的樣式 */
+.chat-area::-webkit-scrollbar-thumb:hover {
+    background: #868e96; /* 滑塊懸停時的背景顏色 */
+}
+
+/* 訊息外層容器樣式 */
+.message-wrapper {
+    margin-bottom: 1rem; /* 底部外邊距 */
+    display: flex; /* 使用 Flexbox 佈局 */
+}
+
+/* 用戶訊息的外層容器樣式 */
+.message-wrapper.user {
+    justify-content: flex-end; /* 子項目（訊息）靠右對齊 */
+}
+
+/* 機器人訊息的外層容器樣式 */
+.message-wrapper.bot {
+    justify-content: flex-start; /* 子項目（訊息）靠左對齊 */
+}
+
+/* 訊息本身的基本樣式 */
+.message {
+    padding: 0.8rem 1.2rem; /* 內邊距 */
+    border-radius: 15px; /* 邊框圓角 */
+    max-width: 80%; /* 最大寬度為父容器的 80% */
+    word-wrap: break-word; /* 長單字或 URL 自動換行 */
+    line-height: 1.6; /* 行高 */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* 細微陰影效果 */
+}
+
+/* 用戶訊息的特定樣式 */
+.message.user-message {
+    background-color: #667eea; /* 背景顏色 */
+    color: white; /* 文字顏色 */
+    border-bottom-right-radius: 5px; /* 右下角邊框圓角較小，形成對話氣泡尖角效果 */
+}
+
+/* 用戶訊息中 strong 標籤（粗體文字）的樣式 */
+.message.user-message strong {
+    color: #e0e0e0; /* 粗體文字顏色 */
+}
+
+/* 機器人訊息的特定樣式 */
+.message.bot-message {
+    background-color: #ffffff; /* 背景顏色 */
+    color: #343a40; /* 文字顏色 */
+    border: 1px solid #e9ecef; /* 邊框樣式 */
+    border-bottom-left-radius: 5px; /* 左下角邊框圓角較小，形成對話氣泡尖角效果 */
+}
+
+/* 機器人訊息中 strong 標籤（粗體文字）的樣式 */
+.message.bot-message strong {
+    color: #667eea; /* 粗體文字顏色 */
+}
+
+/* 載入中訊息和錯誤訊息的通用樣式 */
+.loading-message, .error-message {
+    font-style: italic; /* 斜體 */
+    color: #6c757d; /* 文字顏色 */
+    padding: 0.5rem 0; /* 上下內邊距 */
+}
+
+/* 錯誤訊息的特定樣式 */
+.error-message {
+    color: #d9534f; /* 文字顏色（紅色） */
+    font-weight: 500; /* 字體粗細為 500 (medium) */
+}
+
+/* 訊息時間戳樣式 */
+.message-timestamp {
+    font-size: 0.75rem; /* 字體大小 */
+    color: #adb5bd; /* 文字顏色 */
+    margin-top: 0.3rem; /* 頂部外邊距 */
+    display: block; /* 獨占一行顯示 */
+}
+
+/* 緊隨用戶訊息之後的時間戳樣式 */
+.user-message + .message-timestamp {
+    text-align: right; /* 文字靠右對齊 */
+}
+
+/* 緊隨機器人訊息之後的時間戳樣式 */
+.bot-message + .message-timestamp {
+    text-align: left; /* 文字靠左對齊 */
+}
+
+/* 動態邊框色彩變換動畫 */
+@keyframes borderShift {
+    0%   { border-image-source: linear-gradient(0deg,   #e0c3fc, #8ec5fc); } /* 0 度漸層 (背景色1, 背景色2) */
+    25%  { border-image-source: linear-gradient(90deg,  #8ec5fc, #e0c3fc); } /* 90 度漸層 (背景色2, 背景色1) */
+    50%  { border-image-source: linear-gradient(180deg, #e0c3fc, #8ec5fc); } /* 180 度漸層 (背景色1, 背景色2) */
+    75%  { border-image-source: linear-gradient(270deg, #8ec5fc, #e0c3fc); } /* 270 度漸層 (背景色2, 背景色1) */
+    100% { border-image-source: linear-gradient(360deg, #e0c3fc, #8ec5fc); } /* 360 度漸層 (背景色1, 背景色2) */
+}
+
+/* body 的偽元素 (::before)，用於創建頁面思考狀態時的動態邊框 */
+body::before {
+    content: ""; /* 偽元素必須有 content 屬性 */
+    position: fixed; /* 固定定位，相對於視窗 */
+    top: 0; left: 0; right: 0; bottom: 0; /* 佔滿整個視窗 */
+    pointer-events: none; /* 允許點擊穿透此元素 */
+    border: 7px solid transparent; /* 邊框樣式，顏色由 border-image 控制，初始透明 */
+    border-image-slice: 1; /* 邊框圖片裁切方式 */
+    border-radius: 150px; /* 邊框圓角，可調整此數值 */
+    opacity: 0; /* 初始狀態為透明，用於淡入效果 */
+    transition: opacity 0.7s ease-in-out; /* 透明度變化的過渡效果，持續 0.7 秒，緩入緩出 */
+    z-index: 9999; /* 確保在最上層顯示 */
+}
+
+/* 當 body 元素具有 "thinking" class 時，其偽元素 (::before) 的樣式 */
+body.thinking::before {
+    opacity: 1; /* 淡入到完全顯示 */
+    animation: borderShift 8s linear infinite; /* 應用 borderShift 動畫，持續 8 秒，線性播放，無限循環 */
+    border-radius: 150px; /* 四角圓角 (與 body::before 中一致，確保樣式應用) */
+    /* border-image-source 由 @keyframes borderShift 動畫提供 */
+}
