@@ -101,7 +101,60 @@
                 questionInput.focus();
             }
         }
+         document.addEventListener('DOMContentLoaded', function() {
+            const questionForm = document.getElementById('questionForm');
+            const questionInput = document.getElementById('questionInput');
+            const chatArea = document.getElementById('chatArea');
 
+            questionForm.addEventListener('submit', function(event) {
+                if (!questionForm.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                } else {
+                    event.preventDefault(); // 阻止表單的預設送出行為
+                    const question = questionInput.value.trim();
+                    if (question) {
+                        addUserMessage(question);
+                        questionInput.value = ''; // 清空輸入框
+                        // 在這裡可以加入呼叫後端 API 或處理問題的邏輯
+                        // 模擬機器人回覆
+                        setTimeout(() => {
+                            addBotMessage(`您問了：「${question}」，這是一個非常有趣的問題！讓我想想...`);
+                        }, 1000);
+                        setTimeout(() => {
+                            addBotMessage(`(模擬回覆) 關於 "${question}"，根據我的知識庫... [這裡會是實際的答案]`);
+                        }, 3000);
+                    }
+                }
+                questionForm.classList.add('was-validated');
+            });
+
+            function addUserMessage(message) {
+                const messageWrapper = document.createElement('div');
+                messageWrapper.classList.add('message-wrapper', 'user');
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message', 'user-message');
+                messageDiv.innerHTML = `<strong>您：</strong> ${message}`;
+                messageWrapper.appendChild(messageDiv);
+                chatArea.appendChild(messageWrapper);
+                scrollToBottom();
+            }
+
+            function addBotMessage(message) {
+                const messageWrapper = document.createElement('div');
+                messageWrapper.classList.add('message-wrapper', 'bot');
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message', 'bot-message');
+                messageDiv.innerHTML = `<strong>音樂精靈：</strong> ${message}`;
+                messageWrapper.appendChild(messageDiv);
+                chatArea.appendChild(messageWrapper);
+                scrollToBottom();
+            }
+
+            function scrollToBottom() {
+                chatArea.scrollTop = chatArea.scrollHeight;
+            }
+        });
         sendButton.addEventListener('click', askQuestion);
         questionInput.addEventListener('keypress', function(event) {
             if (event.key === 'Enter' && !sendButton.disabled) {
