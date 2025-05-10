@@ -300,3 +300,86 @@ body.thinking::before {
     border-radius: 150px; /* 四角圓角 (與 body::before 中一致，確保樣式應用) */
     /* border-image-source 由 @keyframes borderShift 動畫提供 */
 }
+@media (prefers-color-scheme: dark) {
+  /* 全局背景與文字 */
+  body {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    color: #ececec;
+  }
+
+  /* 卡片容器 */
+  .card {
+    background-color: rgba(30, 30, 30, 0.8);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  /* 卡片標頭：深藍漸層 */
+  .card-header {
+    background: linear-gradient(135deg, #1e3a8a, #0d47a1);
+    color: #f0f0f0;
+  }
+
+  /* 卡片內文 */
+  .card-body {
+    color: #ddd;
+  }
+
+  /* 問答類型選單 */
+  .qa-type-selector {
+    background-color: #3a3a3a;
+  }
+  .qa-type-selector .form-check-label {
+    color: #ddd;
+  }
+
+  /* 輸入框 */
+  .input-group .form-control {
+    background-color: #2b2b2b;
+    border-color: #555;
+    color: #eee;
+  }
+  .input-group .form-control:focus {
+    border-color: #0d47a1;
+    box-shadow: 0 0 0 0.25rem rgba(13, 71, 161, 0.4);
+  }
+
+  /* 按鈕 */
+  .input-group .btn {
+    background-color: #0d47a1;
+    border-color: #0d47a1;
+    color: #fff;
+  }
+  .input-group .btn:hover {
+    background-color: #0b3a8c;
+    border-color: #0b3a8c;
+  }
+
+  /* 聊天區背景 */
+  .chat-area {
+    background-color: rgba(20, 20, 20, 0.6);
+  }
+
+  /* 使用者訊息泡泡 */
+  .message.user-message {
+    background-color: #0d47a1;
+    color: #fff;
+  }
+
+  /* 機器人訊息泡泡 */
+  .message.bot-message {
+    background-color: #2c3e50;
+    color: #ddd;
+    border-color: #444;
+  }
+
+  /* 滾動條深色主題 */
+  .chat-area::-webkit-scrollbar-track {
+    background: #2b2b2b;
+  }
+  .chat-area::-webkit-scrollbar-thumb {
+    background: #555;
+  }
+  .chat-area::-webkit-scrollbar-thumb:hover {
+    background: #666;
+  }
+}
