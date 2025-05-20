@@ -7,6 +7,7 @@ const clickSound2 = document.getElementById('clickSound2');
 const thinkingSound = document.getElementById('thinkingSound');
 
 clickSound.preload = 'auto';
+clickSound2.preload = 'auto'; // 新增 clickSound2 預載
 
 function getCurrentTimestamp() {
     return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -59,7 +60,10 @@ function typeMessage(messageContent, sender, delay = 50) {
             // 逐字輸出完成後播放音效
             if (sender === 'bot') { // 只在機器人回覆時播放
                 clickSound2.currentTime = 0;
-                clickSound2.play();
+                clickSound2.play().catch(error => {
+                    console.warn("clickSound2 播放失敗:", error);
+                    // 您可以在此處添加給使用者的提示，例如「音效播放失敗」
+                });
             }
         }
     }
@@ -196,6 +200,26 @@ async function askQuestion() {
 sendButton.addEventListener('click', () => {
     clickSound.currentTime = 0;
     clickSound.play();
+
+    // 嘗試為 iOS 解鎖 clickSound2
+    // 先播放再立即暫停，並忽略可能發生的錯誤
+    const playPromise = clickSound2.play();
+    if (playPromise !== undefined) {
+        playPromise.then(_ => {
+            clickSound2.pause();
+            clickSound2.currentTime = 0; // 重設以便稍後實際播放
+        }).catch(error => {
+            // iOS 可能不允許此處的 play()，忽略錯誤
+            // console.warn("clickSound2 解鎖嘗試失敗:", error);
+            // 即使解鎖失敗，也重設 currentTime
+            clickSound2.currentTime = 0;
+        });
+    } else {
+        // 針對不返回 Promise 的舊版瀏覽器（雖然 iOS 通常支援 Promise）
+        clickSound2.pause();
+        clickSound2.currentTime = 0;
+    }
+
     askQuestion();
 });
 
@@ -203,6 +227,22 @@ questionInput.addEventListener('keypress', function(event) {
     if (event.key === 'Enter' && !sendButton.disabled) {
         clickSound.currentTime = 0;
         clickSound.play();
+
+        // 嘗試為 iOS 解鎖 clickSound2
+        const playPromise = clickSound2.play();
+        if (playPromise !== undefined) {
+            playPromise.then(_ => {
+                clickSound2.pause();
+                clickSound2.currentTime = 0;
+            }).catch(error => {
+                // console.warn("clickSound2 解鎖嘗試失敗:", error);
+                clickSound2.currentTime = 0;
+            });
+        } else {
+            clickSound2.pause();
+            clickSound2.currentTime = 0;
+        }
+
         askQuestion();
     }
 });
@@ -226,6 +266,22 @@ const defaultPrompts = [
     btn.addEventListener('click', () => {
     clickSound.currentTime = 0;
     clickSound.play();
+
+    // 嘗試為 iOS 解鎖 clickSound2
+    const playPromise = clickSound2.play();
+    if (playPromise !== undefined) {
+        playPromise.then(_ => {
+            clickSound2.pause();
+            clickSound2.currentTime = 0;
+        }).catch(error => {
+            // console.warn("clickSound2 解鎖嘗試失敗:", error);
+            clickSound2.currentTime = 0;
+        });
+    } else {
+        clickSound2.pause();
+        clickSound2.currentTime = 0;
+    }
+
       questionInput.value = promptText;
       questionInput.focus();
       askQuestion();
