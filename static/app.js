@@ -1,6 +1,9 @@
 const questionInput = document.getElementById('questionInput');
 const sendButton = document.getElementById('sendButton');
 const chatArea = document.getElementById('chatArea');
+//sound
+const clickSound = document.getElementById('clickSound');
+clickSound.preload = 'auto';
 
 function getCurrentTimestamp() {
     return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -155,9 +158,17 @@ async function askQuestion() {
         chatArea.scrollTop = chatArea.scrollHeight;
     }
 });
-sendButton.addEventListener('click', askQuestion);
+
+sendButton.addEventListener('click', () => {
+    clickSound.currentTime = 0;
+    clickSound.play();
+    askQuestion();
+});
+
 questionInput.addEventListener('keypress', function(event) {
     if (event.key === 'Enter' && !sendButton.disabled) {
+        clickSound.currentTime = 0;
+        clickSound.play();
         askQuestion();
     }
 });
@@ -179,6 +190,8 @@ const defaultPrompts = [
     // 使用 Bootstrap Icons 的 stars
     btn.innerHTML = '<i class="bi bi-stars me-1"></i>' + promptText;
     btn.addEventListener('click', () => {
+    clickSound.currentTime = 0;
+    clickSound.play();
       questionInput.value = promptText;
       questionInput.focus();
       askQuestion();
