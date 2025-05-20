@@ -288,7 +288,7 @@ body::before {
     border: 7px solid transparent; /* 邊框樣式，顏色由 border-image 控制，初始透明 */
     border-image-slice: 1; /* 邊框圖片裁切方式 */
     border-radius: 150px; /* 邊框圓角，可調整此數值 */
-    opacity: 0; /* 初始狀態為透明，用於淡入效果 */
+    opacity: 0.5; /* 初始狀態為透明，用於淡入效果 */
     transition: opacity 0.7s ease-in-out; /* 透明度變化的過渡效果，持續 0.7 秒，緩入緩出 */
     z-index: 9999; /* 確保在最上層顯示 */
 }

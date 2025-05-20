@@ -4,6 +4,8 @@ const chatArea = document.getElementById('chatArea');
 //sound
 const clickSound = document.getElementById('clickSound');
 const clickSound2 = document.getElementById('clickSound2');
+const thinkingSound = document.getElementById('thinkingSound');
+
 clickSound.preload = 'auto';
 
 function getCurrentTimestamp() {
@@ -53,6 +55,12 @@ function typeMessage(messageContent, sender, delay = 50) {
             chatArea.scrollTop = chatArea.scrollHeight;
             i++;
             setTimeout(typeChar, delay);
+        } else {
+            // 逐字輸出完成後播放音效
+            if (sender === 'bot') { // 只在機器人回覆時播放
+                clickSound2.currentTime = 0;
+                clickSound2.play();
+            }
         }
     }
     typeChar();
@@ -74,6 +82,20 @@ async function askQuestion() {
     loadingPlaceholder.innerHTML = loadingMessageHTML;
     chatArea.appendChild(loadingPlaceholder);
     chatArea.scrollTop = chatArea.scrollHeight;
+
+    setTimeout(() => {
+        const immediate = thinkingSound.cloneNode();
+        immediate.currentTime = 0;
+        immediate.play();
+      }, 500);  // 200 毫秒
+
+    const thinkingInterval = setInterval(() => {
+        // cloneNode 確保可重疊觸發
+        const snd = thinkingSound.cloneNode();
+        snd.currentTime = 0;
+        snd.play();
+      }, 4500);
+
     try {
         const response = await fetch('/ask', {
             method: 'POST',
@@ -84,9 +106,13 @@ async function askQuestion() {
         if (response.ok) {
             const data = await response.json();
             if (data.answer) {
-                 // 回答一開始播放點擊音效
-                clickSound2.currentTime = 0;
-                clickSound2.play();
+                // setTimeout(() => { // 移除此處的 clickSound2 播放
+                //     clickSound2.currentTime = 0;
+                //     clickSound2.play();
+                // }, 300);
+            
+                
+                 
                 // 使用逐字輸出效果
                 typeMessage(data.answer, 'bot');
             } else if (data.error) {
@@ -101,6 +127,9 @@ async function askQuestion() {
         addMessageToChat(`<span class="error-message"><i class="fas fa-network-wired me-1"></i>網絡錯誤：${error.message}</span>`, 'bot');
         console.error('Error:', error);
     } finally {
+
+        clearInterval(thinkingInterval);
+
         // 移除背景邊框
         document.body.classList.remove('thinking');
 
@@ -203,4 +232,3 @@ const defaultPrompts = [
     });
     suggestedPromptsDiv.appendChild(btn);
   });
-  
