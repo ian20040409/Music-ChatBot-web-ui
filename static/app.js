@@ -3,6 +3,7 @@ const sendButton = document.getElementById('sendButton');
 const chatArea = document.getElementById('chatArea');
 //sound
 const clickSound = document.getElementById('clickSound');
+const clickSound2 = document.getElementById('clickSound2');
 clickSound.preload = 'auto';
 
 function getCurrentTimestamp() {
@@ -45,6 +46,7 @@ function typeMessage(messageContent, sender, delay = 50) {
     let i = 0;
     function typeChar() {
         if (i <= messageContent.length) {
+            
             // 將換行轉 <br>
             const text = messageContent.slice(0, i).replace(/\n/g, '<br>');
             messageDiv.innerHTML = strongPrefix + text;
@@ -82,6 +84,9 @@ async function askQuestion() {
         if (response.ok) {
             const data = await response.json();
             if (data.answer) {
+                 // 回答一開始播放點擊音效
+                clickSound2.currentTime = 0;
+                clickSound2.play();
                 // 使用逐字輸出效果
                 typeMessage(data.answer, 'bot');
             } else if (data.error) {
