@@ -303,14 +303,16 @@ body.thinking::before {
 @media (prefers-color-scheme: dark) {
     /* 全局背景與文字 */
     body {
-      background: linear-gradient(135deg, #2c3e50, #34495e);
-      color: #ececec;
-    }
+        background: linear-gradient(135deg, #364a8a, #402e6b); /* 深藍與深紫漸層 */
+        color: #ececec;
+      }
+      
   
     /* 卡片容器 */
     .card {
-      background-color: rgba(30, 30, 30, 0.8);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      background-color: rgba(30, 30, 30, 0.651);
+      box-shadow: 0 10px 30px rgb(37, 37, 37);
+      backdrop-filter: blur(100px);
     }
   
     /* 卡片標頭：深藍漸層 */
