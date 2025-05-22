@@ -1,290 +1,200 @@
+// static/app.js
+
+// Element references
 const questionInput = document.getElementById('questionInput');
 const sendButton = document.getElementById('sendButton');
 const chatArea = document.getElementById('chatArea');
-//sound
+const suggestedPromptsDiv = document.getElementById('suggestedPrompts');
+
+// Sounds
 const clickSound = document.getElementById('clickSound');
 const clickSound2 = document.getElementById('clickSound2');
 const thinkingSound = document.getElementById('thinkingSound');
-
 clickSound.preload = 'auto';
-clickSound2.preload = 'auto'; // 新增 clickSound2 預載
+clickSound2.preload = 'auto';
 
-function getCurrentTimestamp() {
-    return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+let recaptchaWidgetId = null;
+let siteReady = false;
+
+// 初始禁用 UI
+function disableUI() {
+  sendButton.disabled = true;
+  questionInput.disabled = true;
+  [...suggestedPromptsDiv.querySelectorAll('button')].forEach(b => b.disabled = true);
+}
+function enableUI() {
+  sendButton.disabled = false;
+  questionInput.disabled = false;
+  [...suggestedPromptsDiv.querySelectorAll('button')].forEach(b => b.disabled = false);
 }
 
-function addMessageToChat(messageContent, sender) {
-    const wrapper = document.createElement('div');
-    wrapper.classList.add('message-wrapper');
-    const messageDiv = document.createElement('div');
-    messageDiv.classList.add('message');
-    let strongPrefix = '';
-    if (sender === 'user') {
-        wrapper.classList.add('user');
-        messageDiv.classList.add('user-message');
-        strongPrefix = '<strong>你：</strong> ';
-    } else {
-        wrapper.classList.add('bot');
-        messageDiv.classList.add('bot-message');
-        strongPrefix = '<strong>音樂精靈：</strong> ';
-    }
-    messageDiv.innerHTML = `${strongPrefix}${messageContent}`;
-    wrapper.appendChild(messageDiv);
-    chatArea.appendChild(wrapper);
-    chatArea.scrollTop = chatArea.scrollHeight;
-}
-
-// 新增：逐字打字機效果
-function typeMessage(messageContent, sender, delay = 50) {
-    const wrapper = document.createElement('div');
-    wrapper.classList.add('message-wrapper', sender === 'user' ? 'user' : 'bot');
-    const messageDiv = document.createElement('div');
-    messageDiv.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
-    wrapper.appendChild(messageDiv);
-    chatArea.appendChild(wrapper);
-    chatArea.scrollTop = chatArea.scrollHeight;
-    const strongPrefix = sender === 'user'
-        ? '<strong>你：</strong> '
-        : '<strong>音樂精靈：</strong> ';
-    let i = 0;
-    function typeChar() {
-        if (i <= messageContent.length) {
-            
-            // 將換行轉 <br>
-            const text = messageContent.slice(0, i).replace(/\n/g, '<br>');
-            messageDiv.innerHTML = strongPrefix + text;
-            chatArea.scrollTop = chatArea.scrollHeight;
-            i++;
-            setTimeout(typeChar, delay);
-        } else {
-            // 逐字輸出完成後播放音效
-            if (sender === 'bot') { // 只在機器人回覆時播放
-                clickSound2.currentTime = 0;
-                clickSound2.play().catch(error => {
-                    console.warn("clickSound2 播放失敗:", error);
-                    // 您可以在此處添加給使用者的提示，例如「音效播放失敗」
-                });
-            }
-        }
-    }
-    typeChar();
-}
-
-async function askQuestion() {
-    // 在背景顯示動態邊框
-    document.body.classList.add('thinking');
-
-    const question = questionInput.value.trim();
-    const selectedQaType = document.querySelector('input[name="qaType"]:checked').value;
-    if (!question) return;
-    addMessageToChat(question, 'user');
-    questionInput.value = '';
-    sendButton.disabled = true;
-    sendButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> 發送中...';
-    const loadingMessageHTML = `<div class="message-wrapper bot"><div class="message bot-message loading-message">音樂精靈正在思考中... <div class="spinner-grow spinner-grow-sm text-primary ms-1" role="status"><span class="visually-hidden">Loading...</span></div></div></div>`;
-    const loadingPlaceholder = document.createElement('div');
-    loadingPlaceholder.innerHTML = loadingMessageHTML;
-    chatArea.appendChild(loadingPlaceholder);
-    chatArea.scrollTop = chatArea.scrollHeight;
-
-    setTimeout(() => {
-        const immediate = thinkingSound.cloneNode();
-        immediate.currentTime = 0;
-        immediate.play();
-      }, 500);  // 200 毫秒
-
-    const thinkingInterval = setInterval(() => {
-        // cloneNode 確保可重疊觸發
-        const snd = thinkingSound.cloneNode();
-        snd.currentTime = 0;
-        snd.play();
-      }, 4500);
-
-    try {
-        const response = await fetch('/ask', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ question: question, qa_type: selectedQaType }),
-        });
-        loadingPlaceholder.remove();
-        if (response.ok) {
-            const data = await response.json();
-            if (data.answer) {
-                // setTimeout(() => { // 移除此處的 clickSound2 播放
-                //     clickSound2.currentTime = 0;
-                //     clickSound2.play();
-                // }, 300);
-            
-                
-                 
-                // 使用逐字輸出效果
-                typeMessage(data.answer, 'bot');
-            } else if (data.error) {
-                addMessageToChat(`<span class="error-message"><i class="fas fa-exclamation-triangle me-1"></i>錯誤：${data.error}</span>`, 'bot');
-            }
-        } else {
-            const errorData = await response.json();
-            addMessageToChat(`<span class="error-message"><i class="fas fa-exclamation-triangle me-1"></i>請求失敗：${response.status} ${errorData.error || ''}</span>`, 'bot');
-        }
-    } catch (error) {
-        loadingPlaceholder.remove();
-        addMessageToChat(`<span class="error-message"><i class="fas fa-network-wired me-1"></i>網絡錯誤：${error.message}</span>`, 'bot');
-        console.error('Error:', error);
-    } finally {
-
-        clearInterval(thinkingInterval);
-
-        // 移除背景邊框
-        document.body.classList.remove('thinking');
-
-        sendButton.disabled = false;
-        sendButton.innerHTML = '<i class="fas fa-paper-plane me-1"></i> 發送';
-        questionInput.focus();
-    }
-}
- document.addEventListener('DOMContentLoaded', function() {
-    const questionForm = document.getElementById('questionForm');
-    const questionInput = document.getElementById('questionInput');
-    const chatArea = document.getElementById('chatArea');
-
-    questionForm.addEventListener('submit', function(event) {
-        if (!questionForm.checkValidity()) {
-            event.preventDefault();
-            event.stopPropagation();
-        } else {
-            event.preventDefault(); // 阻止表單的預設送出行為
-            const question = questionInput.value.trim();
-            if (question) {
-                addUserMessage(question);
-                questionInput.value = ''; // 清空輸入框
-                // 在這裡可以加入呼叫後端 API 或處理問題的邏輯
-                // 模擬機器人回覆
-                setTimeout(() => {
-                    addBotMessage(`您問了：「${question}」，這是一個非常有趣的問題！讓我想想...`);
-                }, 1000);
-                setTimeout(() => {
-                    addBotMessage(`(模擬回覆) 關於 "${question}"，根據我的知識庫... [這裡會是實際的答案]`);
-                }, 3000);
-            }
-        }
-        questionForm.classList.add('was-validated');
-    });
-
-    function addUserMessage(message) {
-        const messageWrapper = document.createElement('div');
-        messageWrapper.classList.add('message-wrapper', 'user');
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('message', 'user-message');
-        messageDiv.innerHTML = `<strong>您：</strong> ${message}`;
-        messageWrapper.appendChild(messageDiv);
-        chatArea.appendChild(messageWrapper);
-        scrollToBottom();
-    }
-
-    function addBotMessage(message) {
-        const messageWrapper = document.createElement('div');
-        messageWrapper.classList.add('message-wrapper', 'bot');
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('message', 'bot-message');
-        messageDiv.innerHTML = `<strong>音樂精靈：</strong> ${message}`;
-        messageWrapper.appendChild(messageDiv);
-        chatArea.appendChild(messageWrapper);
-        scrollToBottom();
-    }
-
-    function scrollToBottom() {
-        chatArea.scrollTop = chatArea.scrollHeight;
-    }
-});
-
-sendButton.addEventListener('click', () => {
-    clickSound.currentTime = 0;
-    clickSound.play();
-
-    // 嘗試為 iOS 解鎖 clickSound2
-    // 先播放再立即暫停，並忽略可能發生的錯誤
-    const playPromise = clickSound2.play();
-    if (playPromise !== undefined) {
-        playPromise.then(_ => {
-            clickSound2.pause();
-            clickSound2.currentTime = 0; // 重設以便稍後實際播放
-        }).catch(error => {
-            // iOS 可能不允許此處的 play()，忽略錯誤
-            // console.warn("clickSound2 解鎖嘗試失敗:", error);
-            // 即使解鎖失敗，也重設 currentTime
-            clickSound2.currentTime = 0;
-        });
-    } else {
-        // 針對不返回 Promise 的舊版瀏覽器（雖然 iOS 通常支援 Promise）
-        clickSound2.pause();
-        clickSound2.currentTime = 0;
-    }
-
-    askQuestion();
-});
-
-questionInput.addEventListener('keypress', function(event) {
-    if (event.key === 'Enter' && !sendButton.disabled) {
-        clickSound.currentTime = 0;
-        clickSound.play();
-
-        // 嘗試為 iOS 解鎖 clickSound2
-        const playPromise = clickSound2.play();
-        if (playPromise !== undefined) {
-            playPromise.then(_ => {
-                clickSound2.pause();
-                clickSound2.currentTime = 0;
-            }).catch(error => {
-                // console.warn("clickSound2 解鎖嘗試失敗:", error);
-                clickSound2.currentTime = 0;
-            });
-        } else {
-            clickSound2.pause();
-            clickSound2.currentTime = 0;
-        }
-
-        askQuestion();
-    }
-});
-// 1. 定義一組預設問題
-const defaultPrompts = [
-    '什麼是樂理？',
-    '什麼是五線譜？',
-    '什麼是和弦？',
-    '鋼琴有多少個鍵？'
-  ];
-  
-  // 2. 取得容器
-  const suggestedPromptsDiv = document.getElementById('suggestedPrompts');
-  
-  // 3. 產生按鈕並插入
-  defaultPrompts.forEach(promptText => {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    // 使用 Bootstrap Icons 的 stars
-    btn.innerHTML = '<i class="bi bi-stars me-1"></i>' + promptText;
-    btn.addEventListener('click', () => {
-    clickSound.currentTime = 0;
-    clickSound.play();
-
-    // 嘗試為 iOS 解鎖 clickSound2
-    const playPromise = clickSound2.play();
-    if (playPromise !== undefined) {
-        playPromise.then(_ => {
-            clickSound2.pause();
-            clickSound2.currentTime = 0;
-        }).catch(error => {
-            // console.warn("clickSound2 解鎖嘗試失敗:", error);
-            clickSound2.currentTime = 0;
-        });
-    } else {
-        clickSound2.pause();
-        clickSound2.currentTime = 0;
-    }
-
-      questionInput.value = promptText;
-      questionInput.focus();
-      askQuestion();
-    });
-    suggestedPromptsDiv.appendChild(btn);
+// reCAPTCHA 載入 callback
+function onRecaptchaLoad() {
+  recaptchaWidgetId = grecaptcha.render('recaptcha-container', {
+    sitekey: '6LdpUUIrAAAAAN0B7l4yFjy9-JHG952f5O2iuleh',
+    callback: onRecaptchaSuccess
   });
+}
+
+// 驗證成功後啟用網站
+function onRecaptchaSuccess(token) {
+  // 隱藏 Modal
+  const modalEl = document.getElementById('recaptchaModal');
+  bootstrap.Modal.getInstance(modalEl).hide();
+
+  siteReady = true;
+  enableUI();
+  addMessageToChat('驗證完成，歡迎使用音樂知識問答精靈！', 'bot');
+}
+
+// 顯示 Modal 進行驗證
+function showRecaptchaModal() {
+  disableUI();
+  const modal = new bootstrap.Modal(document.getElementById('recaptchaModal'));
+  modal.show();
+
+  // 如果尚未渲染，render
+  if (!recaptchaWidgetId) {
+    recaptchaWidgetId = grecaptcha.render('recaptcha-container', {
+      sitekey: '6LdpUUIrAAAAAN0B7l4yFjy9-JHG952f5O2iuleh',
+      callback: onRecaptchaSuccess
+    });
+  } else {
+    grecaptcha.reset(recaptchaWidgetId);
+  }
+}
+
+// Utility: add a chat message
+function addMessageToChat(content, sender) {
+  const wrapper = document.createElement('div');
+  wrapper.classList.add('message-wrapper', sender === 'user' ? 'user' : 'bot');
+  const msg = document.createElement('div');
+  msg.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
+  const prefix = sender === 'user' ? '<strong>你：</strong> ' : '<strong>音樂精靈：</strong> ';
+  msg.innerHTML = prefix + content;
+  wrapper.appendChild(msg);
+  chatArea.appendChild(wrapper);
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+// Utility: typing effect
+function typeMessage(content, sender, delay = 50) {
+  const wrapper = document.createElement('div');
+  wrapper.classList.add('message-wrapper', sender === 'user' ? 'user' : 'bot');
+  const msg = document.createElement('div');
+  msg.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
+  wrapper.appendChild(msg);
+  chatArea.appendChild(wrapper);
+  chatArea.scrollTop = chatArea.scrollHeight;
+
+  const prefix = sender === 'user' ? '<strong>你：</strong> ' : '<strong>音樂精靈：</strong> ';
+  let i = 0;
+  function step() {
+    if (i <= content.length) {
+      msg.innerHTML = prefix + content.slice(0, i).replace(/\n/g, '<br>');
+      chatArea.scrollTop = chatArea.scrollHeight;
+      i++;
+      setTimeout(step, delay);
+    } else if (sender === 'bot') {
+      clickSound2.currentTime = 0;
+      clickSound2.play().catch(() => {});
+    }
+  }
+  step();
+}
+
+// 問答流程
+async function askQuestion() {
+  if (!siteReady) return;
+
+  document.body.classList.add('thinking');
+  const question = questionInput.value.trim();
+  const selectedQaType = document.querySelector('input[name="qaType"]:checked').value;
+  if (!question) return;
+
+  addMessageToChat(question, 'user');
+  questionInput.value = '';
+  sendButton.disabled = true;
+  sendButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> 發送中...';
+
+  const loading = document.createElement('div');
+  loading.innerHTML = `<div class="message-wrapper bot"><div class="message bot-message">
+    音樂精靈正在思考... <div class="spinner-grow spinner-grow-sm text-primary" role="status"></div>
+  </div></div>`;
+  chatArea.appendChild(loading);
+  chatArea.scrollTop = chatArea.scrollHeight;
+
+  setTimeout(() => {
+    const snd = thinkingSound.cloneNode();
+    snd.currentTime = 0;
+    snd.play();
+  }, 500);
+  const interval = setInterval(() => {
+    const snd = thinkingSound.cloneNode();
+    snd.currentTime = 0;
+    snd.play();
+  }, 4500);
+
+  try {
+    const resp = await fetch('/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question, qa_type: selectedQaType })
+    });
+    loading.remove();
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data.answer) {
+        typeMessage(data.answer, 'bot');
+      } else {
+        addMessageToChat(`錯誤：${data.error || '未知錯誤'}`, 'bot');
+      }
+    } else {
+      const err = await resp.json();
+      addMessageToChat(`請求失敗 ${resp.status} ${err.error || ''}`, 'bot');
+    }
+  } catch (e) {
+    loading.remove();
+    addMessageToChat(`網絡錯誤：${e.message}`, 'bot');
+  } finally {
+    clearInterval(interval);
+    document.body.classList.remove('thinking');
+    sendButton.disabled = false;
+    sendButton.innerHTML = '<i class="fas fa-paper-plane me-1"></i> 發送';
+    questionInput.focus();
+  }
+}
+
+// 初始預設問題按鈕
+const defaultPrompts = ['什麼是樂理？','什麼是五線譜？','什麼是和弦？','鋼琴有多少個鍵？'];
+defaultPrompts.forEach(text => {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'btn btn-outline-secondary';
+  btn.innerHTML = `<i class="bi bi-stars me-1"></i>${text}`;
+  btn.addEventListener('click', () => {
+    clickSound.currentTime = 0; clickSound.play();
+    questionInput.value = text;
+    askQuestion();
+  });
+  suggestedPromptsDiv.appendChild(btn);
+});
+
+// 事件綁定
+sendButton.addEventListener('click', () => {
+  clickSound.currentTime = 0; clickSound.play();
+  askQuestion();
+});
+questionInput.addEventListener('keypress', e => {
+  if (e.key === 'Enter' && !sendButton.disabled) {
+    clickSound.currentTime = 0; clickSound.play();
+    askQuestion();
+  }
+});
+
+// DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+  disableUI();
+  addMessageToChat('請先完成驗證以進入系統。', 'bot');
+  showRecaptchaModal();
+});

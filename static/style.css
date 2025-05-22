@@ -152,7 +152,8 @@ body {
 /* 建議提示詞按鈕懸停效果：放大並添加陰影 */
 .suggested-prompts button:hover {
     transform: scale(1.08); /* 放大 1.08 倍 */
-    box-shadow: 0 6px 20px rgba(0,0,0,0.2); /* 添加陰影 */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6); /* 添加陰影 */
+    color: #0c0914;
 }
 
 /* 聊天區域樣式 */
@@ -350,11 +351,32 @@ body.thinking::before {
       background-color: #0d47a1;
       border-color: #0d47a1;
       color: #fff;
+      transition: transform .15s ease, box-shadow .15s ease;
     }
     .input-group .btn:hover {
       background-color: #0b3a8c;
       border-color: #0b3a8c;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+      transform: translateY(-1px);
     }
+
+
+    .suggested-prompts button:hover {
+        transform: scale(2.08);
+        box-shadow: 0 8px 24px rgba(255, 255, 255, 0.6);
+        color: black;
+        
+      }
+      /* 按鈕 Focus Ring */
+      .input-group .btn:focus,
+      .input-group .form-control:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.6);
+      }
+      .input-group .btn:active {
+        transform: translateY(1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+      }
   
     /* 聊天區背景 */
     .chat-area {
@@ -388,5 +410,27 @@ body.thinking::before {
     footer a.text-muted {
         color: #ffffff !important;
     }
+    /* reCAPTCHA Modal */
+    #recaptchaModal .modal-content {
+        background-color: #1e1e1e;
+        color: #e0e0e0;
+        border: none;
+        box-shadow: 0 0 20px rgba(0,0,0,0.8);
+      }
+      #recaptchaModal .modal-header {
+        border-bottom: 1px solid #333;
+      }
+      #recaptchaModal .modal-body {
+        background-color: #2b2b2b;
+      }
+      /* 隱藏預設 close 按鈕（如果仍殘留） */
+      #recaptchaModal .btn-close {
+        display: none;
+      }
+      /* reCAPTCHA widget 背景也微調 */
+      #recaptcha-container .grecaptcha-badge,
+      #recaptcha-container iframe {
+        filter: brightness(0.9) contrast(1.1);
+      }
 }
   
