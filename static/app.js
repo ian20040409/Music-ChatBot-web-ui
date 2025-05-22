@@ -13,6 +13,47 @@ const thinkingSound = document.getElementById('thinkingSound');
 clickSound.preload = 'auto';
 clickSound2.preload = 'auto';
 
+
+
+// 建一組 pool
+// 全域變數
+
+const click2Pool = Array.from({ length: 5 }, () => {
+    const a = new Audio(clickSound2.src);
+    a.preload = 'auto';
+    a.load();
+    return a;
+  });
+  let click2Idx = 0;
+  
+  // 2. 靜音解鎖函式
+  function silentUnlock(audio) {
+    audio.muted = true;               // 全程靜音
+    audio.play()                      // play → pause，但聽不到聲音
+      .then(() => {
+        audio.pause();
+        audio.muted = false;          // 解鎖後再打開聲音
+      })
+      .catch(() => {
+        audio.muted = false;
+      });
+  }
+  function playClick2() {
+    const a = click2Pool[click2Idx];
+    a.currentTime = 0;
+    a.play().catch(() => {});
+    click2Idx = (click2Idx + 1) % click2Pool.length;
+  }
+  
+
+
+  
+//  
+
+
+
+
+
 let recaptchaWidgetId = null;
 let siteReady = false;
 
@@ -38,6 +79,10 @@ function onRecaptchaLoad() {
 
 // 驗證成功後啟用網站
 function onRecaptchaSuccess(token) {
+
+    [clickSound, clickSound2, thinkingSound, ...click2Pool].forEach(silentUnlock);
+    // 先靜音解鎖
+    
  // 隱藏 Modal
  const modalEl = document.getElementById('recaptchaModal');
  bootstrap.Modal.getInstance(modalEl).hide();
@@ -100,8 +145,9 @@ function typeMessage(content, sender, delay = 50) {
       i++;
       setTimeout(step, delay);
     } else if (sender === 'bot') {
-      clickSound2.currentTime = 0;
-      clickSound2.play().catch(() => {});
+      playClick2();
+      
+     
     }
   }
   step();
