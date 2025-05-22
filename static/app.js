@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const startBtn = document.createElement('button');
     startBtn.id = 'startVerifyBtn';
     startBtn.textContent = '開始驗證';
-    startBtn.className = 'btn btn-primary';
+    startBtn.className = 'btn btn-warning';
     startBtn.addEventListener('click', showRecaptchaModal);
     startBtnWrapper.appendChild(startBtn);
     chatArea.appendChild(startBtnWrapper);
