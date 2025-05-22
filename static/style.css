@@ -200,6 +200,83 @@
     100% { background-position:   0%   50%; }
   }
   
+
+  @media (max-width: 768px) {
+    /* ===== 整体布局：锁高度 + 隐藏滚动 ===== */
+    body {
+      padding: 0 !important;
+      display: block !important;
+    }
+    footer,
+    .modal-backdrop + footer {
+      display: none !important;
+    }
+  
+    .chat-container-wrapper {
+      width: 100vw !important;
+      height: 100vh !important;
+      margin: 0; padding: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;       /* 禁止最外层滚动 */
+    }
+  
+    /* ===== Card 铺满全屏，禁止自己滚 ===== */
+    .card {
+      flex: 1 1 auto;
+      width: 100% !important;
+      height: 100% !important;
+      border-radius: 0 !important;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;       /* 禁止卡片本身滚动 */
+      box-shadow: none !important;
+      backdrop-filter: none !important;
+    }
+  
+    /* ===== Header 固定 ===== */
+    .card-header {
+      flex: 0 0 auto;
+      border-radius: 0;
+      padding-top: env(safe-area-inset-top, 0.5rem);
+      padding: 0.5rem;
+    }
+    .card-header h1 {
+      font-size: 1.3rem !important;
+      line-height: 1.2;
+    }
+  
+    /* ===== 聊天区：自己滚 ===== */
+    .card-body {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;          /* Flex 子项收缩必需 */
+      padding: 0.5rem;
+      overflow: hidden;       /* 禁止 .card-body 本身滚动 */
+    }
+    .chat-area {
+      flex: 1 1 auto;
+      min-height: 0;          /* Flex 子项收缩必需 */
+      overflow-y: auto;       /* 只有这里可以滚动 */
+      padding: 1rem;
+      background: rgba(248,249,250,0.459);
+      backdrop-filter: blur(8px);
+    }
+  
+    /* ===== 提示词 + 输入区 固定 ===== */
+    .suggested-prompts {
+      flex: 0 0 auto;
+      padding: 0.5rem;
+    }
+    .input-group {
+      flex: 0 0 auto;
+      padding: 0.5rem;
+      padding-bottom: env(safe-area-inset-bottom, 0.5rem);
+    }
+  }
+
+
   
   /* ==============================
      深色模式覆蓋（prefers-color-scheme: dark）
@@ -321,4 +398,3 @@
     }
     
   }
-  
