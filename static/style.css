@@ -106,6 +106,27 @@
    100% {opacity:1;transform:translateY(0);}
   }
   
+
+  /* 半透明黑幕，还是交给 Bootstrap 原生 backdrop */
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.9) !important;
+  }
+  
+  /* 当 Modal 打开时，<body> 会自动获得 .modal-open 类 */
+  body.modal-open .chat-container-wrapper,
+  body.modal-open footer {
+    
+    filter: blur(10px) brightness(0.9);
+    transition: filter 0.3s ease-in-out;
+  }
+  
+  
+  
+      
+  
+  
+
+
   /* 聊天區 */
   .chat-area {
     height:400px;overflow-y:auto;
@@ -298,5 +319,6 @@
     #recaptcha-container iframe {
       filter:brightness(0.9) contrast(1.1);
     }
+    
   }
   
