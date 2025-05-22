@@ -116,7 +116,7 @@
   body.modal-open .chat-container-wrapper,
   body.modal-open footer {
     
-    filter: blur(10px) brightness(1);
+    filter: blur(10px) brightness(0.7);
     transition: filter 0.3s ease-in-out;
   }
   
