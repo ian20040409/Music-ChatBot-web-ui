@@ -38,13 +38,17 @@ function onRecaptchaLoad() {
 
 // 驗證成功後啟用網站
 function onRecaptchaSuccess(token) {
-  // 隱藏 Modal
-  const modalEl = document.getElementById('recaptchaModal');
-  bootstrap.Modal.getInstance(modalEl).hide();
+ // 隱藏 Modal
+ const modalEl = document.getElementById('recaptchaModal');
+ bootstrap.Modal.getInstance(modalEl).hide();
 
-  siteReady = true;
-  enableUI();
-  addMessageToChat('驗證完成，歡迎使用音樂知識問答精靈！', 'bot');
+ // 隱藏「開始驗證」按鈕
+ const startBtn = document.getElementById('startVerifyBtn');
+ if (startBtn) startBtn.style.display = 'none';
+
+ siteReady = true;
+ enableUI();
+ addMessageToChat('驗證完成，歡迎使用音樂知識問答精靈！', 'bot');
 }
 
 // 顯示 Modal 進行驗證
@@ -194,7 +198,21 @@ questionInput.addEventListener('keypress', e => {
 
 // DOM ready
 document.addEventListener('DOMContentLoaded', () => {
-  disableUI();
-  addMessageToChat('請先完成驗證以進入系統。', 'bot');
-  showRecaptchaModal();
+    disableUI();
+    addMessageToChat('請先完成驗證以進入系統。', 'bot');
+  
+    // 新增：插入「開始驗證」按鈕，並給它一個 id
+    const startBtnWrapper = document.createElement('div');
+    startBtnWrapper.classList.add('message-wrapper', 'bot');
+    const startBtn = document.createElement('button');
+    startBtn.id = 'startVerifyBtn';
+    startBtn.textContent = '開始驗證';
+    startBtn.className = 'btn btn-primary';
+    startBtn.addEventListener('click', showRecaptchaModal);
+    startBtnWrapper.appendChild(startBtn);
+    chatArea.appendChild(startBtnWrapper);
+    chatArea.scrollTop = chatArea.scrollHeight;
+  
+    // 一進來就自動彈出 Modal
+    showRecaptchaModal();
 });
