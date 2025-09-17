@@ -160,6 +160,11 @@ async function askQuestion() {
   document.body.classList.add('thinking');
   const question = questionInput.value.trim();
   const selectedQaType = document.querySelector('input[name="qaType"]:checked').value;
+  
+  // 獲取生成參數
+  const temperature = parseFloat(document.getElementById('temperatureRange').value);
+  const maxTokens = parseInt(document.getElementById('maxTokensRange').value);
+  
   if (!question) return;
 
   addMessageToChat(question, 'user');
@@ -186,10 +191,17 @@ async function askQuestion() {
   }, 4500);
 
   try {
+    const requestBody = { 
+      question, 
+      qa_type: selectedQaType,
+      temperature: temperature,
+      max_tokens: maxTokens
+    };
+    
     const resp = await fetch('/ask', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question, qa_type: selectedQaType })
+      body: JSON.stringify(requestBody)
     });
     loading.remove();
     if (resp.ok) {
@@ -240,6 +252,80 @@ questionInput.addEventListener('keypress', e => {
     clickSound.currentTime = 0; clickSound.play();
     askQuestion();
   }
+});
+
+// 參數控制相關事件監聽器
+document.addEventListener('DOMContentLoaded', () => {
+  // Temperature slider
+  const temperatureRange = document.getElementById('temperatureRange');
+  const temperatureValue = document.getElementById('temperatureValue');
+  temperatureRange.addEventListener('input', (e) => {
+    temperatureValue.textContent = e.target.value;
+  });
+
+  // Max tokens slider
+  const maxTokensRange = document.getElementById('maxTokensRange');
+  const maxTokensValue = document.getElementById('maxTokensValue');
+  maxTokensRange.addEventListener('input', (e) => {
+    maxTokensValue.textContent = e.target.value;
+  });
+
+  // 根據選擇的問答類型調整預設參數
+  document.querySelectorAll('input[name="qaType"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      if (e.target.value === 'rag') {
+        // RAG 模式使用較低的溫度以確保一致性
+        temperatureRange.value = '0.6';
+        temperatureValue.textContent = '0.6';
+        maxTokensRange.value = '320';
+        maxTokensValue.textContent = '320';
+      } else if (e.target.value === 'local') {
+        // 本地模式使用較高的溫度以增加創意
+        temperatureRange.value = '0.8';
+        temperatureValue.textContent = '0.8';
+        maxTokensRange.value = '256';
+        maxTokensValue.textContent = '256';
+      }
+    });
+  });
+
+  // 重置按鈕
+  document.getElementById('resetParams').addEventListener('click', () => {
+    const selectedType = document.querySelector('input[name="qaType"]:checked').value;
+    if (selectedType === 'rag') {
+      temperatureRange.value = '0.6';
+      temperatureValue.textContent = '0.6';
+      maxTokensRange.value = '320';
+      maxTokensValue.textContent = '320';
+    } else {
+      temperatureRange.value = '0.8';
+      temperatureValue.textContent = '0.8';
+      maxTokensRange.value = '256';
+      maxTokensValue.textContent = '256';
+    }
+  });
+
+  // 快速預設配置按鈕
+  document.getElementById('conservativePreset').addEventListener('click', () => {
+    temperatureRange.value = '0.3';
+    temperatureValue.textContent = '0.3';
+    maxTokensRange.value = '200';
+    maxTokensValue.textContent = '200';
+  });
+
+  document.getElementById('balancedPreset').addEventListener('click', () => {
+    temperatureRange.value = '0.6';
+    temperatureValue.textContent = '0.6';
+    maxTokensRange.value = '280';
+    maxTokensValue.textContent = '280';
+  });
+
+  document.getElementById('creativePreset').addEventListener('click', () => {
+    temperatureRange.value = '0.9';
+    temperatureValue.textContent = '0.9';
+    maxTokensRange.value = '350';
+    maxTokensValue.textContent = '350';
+  });
 });
 
 // DOM ready

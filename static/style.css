@@ -169,8 +169,101 @@
   }
   .user-message + .message-timestamp { text-align:right; }
   .bot-message + .message-timestamp { text-align:left; }
-  
-body::before {
+
+  /* 進階設定 Modal 淺色模式樣式 */
+  #paramsModal .btn-outline-success {
+    background:#28a745;border-color:#28a745;color:#fff;
+  }
+  #paramsModal .btn-outline-success:hover {
+    background:#218838;border-color:#1e7e34;
+    transform:translateY(-1px);
+    box-shadow:0 6px 20px rgba(40,167,69,0.3);
+  }
+
+  #paramsModal .btn-outline-primary {
+    background:#667eea;border-color:#667eea;color:#fff;
+  }
+  #paramsModal .btn-outline-primary:hover {
+    background:#5a6fd0;border-color:#5a6fd0;
+    transform:translateY(-1px);
+    box-shadow:0 6px 20px rgba(102,126,234,0.3);
+  }
+
+  #paramsModal .btn-outline-warning {
+    background:#ffc107;border-color:#ffc107;color:#212529;
+  }
+  #paramsModal .btn-outline-warning:hover {
+    background:#e0a800;border-color:#d39e00;
+    transform:translateY(-1px);
+    box-shadow:0 6px 20px rgba(255,193,7,0.3);
+  }
+
+  #paramsModal .btn-outline-secondary {
+    background:#6c757d;border-color:#6c757d;color:#fff;
+  }
+  #paramsModal .btn-outline-secondary:hover {
+    background:#5a6268;border-color:#545b62;
+    transform:translateY(-1px);
+    box-shadow:0 6px 20px rgba(108,117,125,0.3);
+  }
+
+  #paramsModal .btn-success:hover {
+    transform:translateY(-1px);
+    box-shadow:0 6px 20px rgba(40,167,69,0.3);
+  }
+
+  /* Modal 整體樣式 */
+  #paramsModal .modal-content {
+    border-radius:15px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+  }
+  #paramsModal .modal-header {
+    background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+    border-top-left-radius:15px;
+    border-top-right-radius:15px;
+  }
+
+  /* 滑桿樣式 - 淺色模式 */
+  #paramsModal .form-range {
+    background:transparent;
+    height:8px;
+  }
+  #paramsModal .form-range::-webkit-slider-track {
+    background:#e9ecef;
+    border-radius:5px;
+    height:8px;
+  }
+  #paramsModal .form-range::-webkit-slider-thumb {
+    background:#667eea;
+    border:2px solid #fff;
+    border-radius:50%;
+    height:20px;
+    width:20px;
+    cursor:pointer;
+    -webkit-appearance:none;
+    box-shadow:0 2px 6px rgba(0,0,0,0.2);
+  }
+  #paramsModal .form-range::-webkit-slider-thumb:hover {
+    background:#5a6fd0;
+    box-shadow:0 4px 12px rgba(102,126,234,0.3);
+  }
+  #paramsModal .form-range::-moz-range-track {
+    background:#e9ecef;
+    border-radius:5px;
+    height:8px;
+    border:none;
+  }
+  #paramsModal .form-range::-moz-range-thumb {
+    background:#667eea;
+    border:2px solid #fff;
+    border-radius:50%;
+    height:20px;
+    width:20px;
+    cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,0.2);
+  }
+
+  body::before {
   content: "";
   position: fixed;
   inset: 0;
@@ -394,6 +487,151 @@ body.thinking::before {
     #recaptcha-container .grecaptcha-badge,
     #recaptcha-container iframe {
       filter:brightness(0.9) contrast(1.1);
+    }
+
+    /* 進階設定 Modal 深色優化 */
+    #paramsModal .modal-content {
+      background:#1e1e1e !important;color:#e0e0e0 !important;border:none;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+    }
+    #paramsModal .modal-header { 
+      border-bottom:1px solid #333;
+      background:linear-gradient(135deg,#1e3a8a,#0d47a1);
+      color:#fff !important;
+    }
+    #paramsModal .modal-body { 
+      background:#2b2b2b !important;
+      color:#e0e0e0 !important;
+    }
+    #paramsModal .modal-footer { 
+      border-top:1px solid #333;
+      background:#2b2b2b !important;
+    }
+
+    /* Modal 內所有文字顏色 */
+    #paramsModal .modal-body * {
+      color:#e0e0e0 !important;
+    }
+    #paramsModal .form-label {
+      color:#e0e0e0 !important;
+    }
+    #paramsModal .form-text {
+      color:#b0b0b0 !important;
+    }
+    #paramsModal .form-text small {
+      color:#a0a0a0 !important;
+    }
+
+    /* 滑桿樣式改進 - 深色模式 */
+    #paramsModal .form-range {
+      background:transparent !important;
+      height:8px;
+    }
+    #paramsModal .form-range::-webkit-slider-track {
+      background:#555 !important;
+      border-radius:5px;
+      height:8px;
+    }
+    #paramsModal .form-range::-webkit-slider-thumb {
+      background:#0d47a1 !important;
+      border:2px solid #fff;
+      border-radius:50%;
+      height:20px;
+      width:20px;
+      cursor:pointer;
+      -webkit-appearance:none;
+      box-shadow:0 2px 6px rgba(0,0,0,0.3);
+    }
+    #paramsModal .form-range::-webkit-slider-thumb:hover {
+      background:#1565c0 !important;
+      box-shadow:0 4px 12px rgba(13,71,161,0.4);
+    }
+    #paramsModal .form-range::-moz-range-track {
+      background:#555 !important;
+      border-radius:5px;
+      height:8px;
+      border:none;
+    }
+    #paramsModal .form-range::-moz-range-thumb {
+      background:#0d47a1 !important;
+      border:2px solid #fff;
+      border-radius:50%;
+      height:20px;
+      width:20px;
+      cursor:pointer;
+      box-shadow:0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    /* 進階設定按鈕樣式 - 深色模式 */
+    #paramsModal .btn-outline-success {
+      background:#28a745;border-color:#28a745;color:#fff;
+    }
+    #paramsModal .btn-outline-success:hover {
+      background:#218838;border-color:#1e7e34;
+      box-shadow:0 4px 12px rgba(40,167,69,0.4);
+    }
+
+    #paramsModal .btn-outline-primary {
+      background:#0d47a1;border-color:#0d47a1;color:#fff;
+    }
+    #paramsModal .btn-outline-primary:hover {
+      background:#0b3a8c;border-color:#0a3378;
+      box-shadow:0 4px 12px rgba(13,71,161,0.4);
+    }
+
+    #paramsModal .btn-outline-warning {
+      background:#ffc107;border-color:#ffc107;color:#212529;
+    }
+    #paramsModal .btn-outline-warning:hover {
+      background:#e0a800;border-color:#d39e00;
+      box-shadow:0 4px 12px rgba(255,193,7,0.4);
+    }
+
+    #paramsModal .btn-outline-secondary {
+      background:#6c757d;border-color:#6c757d;color:#fff;
+    }
+    #paramsModal .btn-outline-secondary:hover {
+      background:#5a6268;border-color:#545b62;
+      box-shadow:0 4px 12px rgba(108,117,125,0.4);
+    }
+
+    #paramsModal .btn-success {
+      background:#28a745;border-color:#28a745;
+    }
+    #paramsModal .btn-success:hover {
+      background:#218838;border-color:#1e7e34;
+      box-shadow:0 4px 12px rgba(40,167,69,0.4);
+    }
+
+    /* 卡片樣式 - 深色模式 */
+    #paramsModal .card {
+      background:#333 !important;border-color:#444;
+    }
+    #paramsModal .card-header {
+      background:#444 !important;border-bottom-color:#555;
+      color:#e0e0e0 !important;
+    }
+    #paramsModal .card-body {
+      background:#333 !important;
+      color:#e0e0e0 !important;
+    }
+
+    /* Badge 樣式 - 深色模式 */
+    #paramsModal .badge.bg-info {
+      background:#17a2b8 !important;
+      color:#fff !important;
+    }
+    #paramsModal .badge.bg-success {
+      background:#28a745 !important;
+      color:#fff !important;
+    }
+
+    /* 圖示顏色 */
+    #paramsModal .text-danger {
+      color:#ff6b6b !important;
+    }
+    #paramsModal .text-primary {
+      color:#74b9ff !important;
     }
     
   }

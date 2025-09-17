@@ -53,6 +53,14 @@
                     
                 </div>
 
+                <!-- 問答風格按鈕 -->
+                <div class="generation-params mt-3 text-center">
+                    <button class="btn btn-secondary" type="button" data-bs-toggle="modal" data-bs-target="#paramsModal">
+                        <i class="fas fa-gear me-1"></i> 回答風格
+                    </button>
+                </div>
+                <br>
+
                 <div class="chat-area" id="chatArea">
                     <div class="message-wrapper bot">
                         <div class="message bot-message">
@@ -104,6 +112,97 @@
     </div>
   </div>
   
+
+    <!-- 進階設定 Modal -->
+    <div class="modal fade" id="paramsModal" tabindex="-1" aria-labelledby="paramsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paramsModalLabel">
+                        <i class="fas fa-gear me-2"></i>回答風格調整
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-4">
+                                <label for="temperatureRange" class="form-label">
+                                    <i class="fas fa-palette me-1 text-danger"></i>
+                                    <strong>回答風格</strong>: <span id="temperatureValue" class="badge bg-info">0.7</span>
+                                </label>
+                                <input type="range" class="form-range" id="temperatureRange" 
+                                       min="0.1" max="1.0" step="0.1" value="0.7">
+                                <div class="form-text">
+                                    <small>
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        調整回答的風格特色<br>
+                                        • 0.1-0.3: 嚴謹正經<br>
+                                        • 0.4-0.7: 平衡自然<br>
+                                        • 0.8-1.0: 創意活潑
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-4">
+                                <label for="maxTokensRange" class="form-label">
+                                    <i class="fas fa-align-left me-1 text-primary"></i>
+                                    <strong>回答詳細度</strong>: <span id="maxTokensValue" class="badge bg-success">256</span>
+                                </label>
+                                <input type="range" class="form-range" id="maxTokensRange" 
+                                       min="100" max="500" step="50" value="256">
+                                <div class="form-text">
+                                    <small>
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        控制回答的詳細程度<br>
+                                        • 100-200: 簡潔扼要<br>
+                                        • 250-350: 適中詳細<br>
+                                        • 400-500: 深度解說
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 預設配置 -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0"><i class="fas fa-star me-1"></i>一鍵選擇風格</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="btn-group w-100" role="group">
+                                        <button type="button" class="btn btn-outline-success" id="conservativePreset">
+                                            <i class="fas fa-graduation-cap me-1"></i>學者風格<br>
+                                            <small>(嚴謹·簡潔)</small>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-primary" id="balancedPreset">
+                                            <i class="fas fa-comment-dots me-1"></i>聊天風格<br>
+                                            <small>(自然·適中)</small>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-warning" id="creativePreset">
+                                            <i class="fas fa-lightbulb me-1"></i>創意風格<br>
+                                            <small>(活潑·詳細)</small>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" id="resetParams">
+                        <i class="fas fa-refresh me-1"></i> 恢復預設
+                    </button>
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+                        <i class="fas fa-check me-1"></i> 套用設定
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <audio id="clickSound" src="static/continue.mp3" preload="auto"></audio>
     <audio id="clickSound2" src="static/reply-ok.mp3" preload="auto"></audio>
