@@ -17,6 +17,9 @@
 
     <script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
 
+   
+
+
 
     
 </head>
@@ -40,6 +43,14 @@
                             <i class="fas fa-brain me-1"></i> 本地模型
                         </label>
                     </div>
+
+                     <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="qaType" id="ollamaType" value="ollama" disabled>
+                        <label class="form-check-label" for="ollamaType" >
+                            <i class="fas fa-network-wired me-1"></i><del> Ollama 遠端模型</del>
+                        </label>
+                    </div>
+                    
                 </div>
 
                 <div class="chat-area" id="chatArea">
