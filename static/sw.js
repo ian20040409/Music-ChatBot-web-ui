@@ -1,16 +1,23 @@
 // static/sw.js
-const CACHE_VERSION = 'v1.0.0';
+const CACHE_VERSION = 'v1.1.0';
 const CACHE_NAME = `pwa-cache-${CACHE_VERSION}`;
 
 // 預先快取：index 與 mp3（依你的檔名調整）
 const PRECACHE = [
-  '/static/index.html',
+  '/',
+  '/index.html',
+  '/static/app.js',
+  '/static/style.css',
+  '/static/manifest.webmanifest',
+  '/static/favicon.png',
   '/static/begin.mp3',
   '/static/click.mp3',
   '/static/click2.mp3',
   '/static/continue.mp3',
   '/static/reply-ok.mp3',
-  '/static/thinking.mp3'
+  '/static/thinking.mp3',
+  '/static/icon/favicon-192.png',
+  '/static/icon/favicon-180-precomposed.png'
 ];
 
 // 安裝：預取核心資產
@@ -75,15 +82,15 @@ self.addEventListener('fetch', (event) => {
   const isMP3 = url.pathname.endsWith('.mp3');
 
   // HTML：network-first，失敗回退 index.html
-  if (isHTML && isSameOrigin && url.pathname.startsWith('/static/')) {
+  if (isHTML && isSameOrigin) {
     event.respondWith(
       fetch(req)
         .then((res) => {
           const clone = res.clone();
-          caches.open(CACHE_NAME).then((c) => c.put('/static/index.html', clone));
+          caches.open(CACHE_NAME).then((c) => c.put('/', clone));
           return res;
         })
-        .catch(() => caches.match('/static/index.html'))
+        .catch(() => caches.match('/') || caches.match('/index.html'))
     );
     return;
   }
