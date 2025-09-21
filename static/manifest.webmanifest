@@ -2,7 +2,7 @@
   "id": "/",
   "name": "Music-Ai-web",
   "short_name": "Music-Ai-web",
-  "description": "支援 RAG、本地/遠端模型的音樂問答體驗。",
+  "description": "支援 RAG、本地/遠端模型的音樂問答體驗。Developed by LNU.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
