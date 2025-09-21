@@ -14,6 +14,38 @@ clickSound.preload = 'auto';
 clickSound2.preload = 'auto';
 
 
+// 註冊 Service Worker（以 /static 為 scope）
+(async () => {
+  if ('serviceWorker' in navigator) {
+    try {
+      await navigator.serviceWorker.register('/static/sw.js', { scope: '/static/' });
+    } catch (e) {
+      // 可選：console.error('SW register failed', e);
+    }
+  }
+})();
+
+// 客製安裝提示
+let deferredPrompt = null;
+const installBtn = document.getElementById('installBtn');
+if (installBtn) installBtn.style.display = 'none';
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (installBtn) installBtn.style.display = 'inline-flex';
+});
+
+installBtn?.addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  installBtn.style.display = 'none';
+});
+
+
+
 
 // 建一組 pool
 // 全域變數
