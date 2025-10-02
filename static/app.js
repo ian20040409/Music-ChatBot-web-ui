@@ -1,5 +1,26 @@
 // static/app.js
 
+// 禁止觸控縮放
+document.addEventListener('touchstart', function(event) {
+  if (event.touches.length > 1) {
+    event.preventDefault(); // 防雙指縮放
+  }
+}, { passive: false });
+
+document.addEventListener('gesturestart', function(event) {
+  event.preventDefault(); // 防手勢縮放
+}, { passive: false });
+
+// 防止雙擊縮放
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function(event) {
+  const now = (new Date()).getTime();
+  if (now - lastTouchEnd <= 300) {
+    event.preventDefault();
+  }
+  lastTouchEnd = now;
+}, { passive: false });
+
 // Element references
 const questionInput = document.getElementById('questionInput');
 const sendButton = document.getElementById('sendButton');
