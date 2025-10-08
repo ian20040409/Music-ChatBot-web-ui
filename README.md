@@ -201,19 +201,9 @@ templates/
 - [Google Fonts](https://fonts.google.com/) - 網路字體服務
 - [MDN Web Docs](https://developer.mozilla.org/) - Web 技術文檔
 
-## 📞 聯絡資訊
 
-- 作者：ian20040409
-- GitHub：[@ian20040409](https://github.com/ian20040409)
-- 專案連結：[Music-ChatBot-web-ui](https://github.com/ian20040409/Music-ChatBot-web-ui)
 
-## 📈 更新日誌
 
-- **v1.0.0** - 初始 UI 版本
-  - 響應式聊天介面
-  - PWA 支援
-  - 音效系統
-  - 參數調整功能
 
 ---
 
