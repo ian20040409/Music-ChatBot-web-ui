@@ -1,0 +1,15 @@
+{
+  "name": "music-chatbot-kiosk",
+  "version": "1.0.0",
+  "description": "Electron kiosk wrapper for the Music ChatBot web UI.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "start:dev": "ELECTRON_START_URL=http://localhost:3000 electron ."
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^27.0.0"
+  }
+}

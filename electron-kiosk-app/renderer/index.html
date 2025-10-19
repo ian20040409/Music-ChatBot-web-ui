@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>音樂知識問答精靈 - Kiosk</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="chat-container-wrapper">
+      <div class="card">
+        <div class="card-header text-center">
+          <h1 class="mb-0"><i class="fas fa-music me-2"></i>音樂知識問答精靈</h1>
+        </div>
+        <div class="card-body">
+          <div class="qa-type-selector text-center mb-3">
+            <span class="badge rounded-pill text-bg-primary">Kiosk Mode</span>
+          </div>
+          <div class="chat-area" id="chatArea">
+            <div class="message-wrapper bot">
+              <div class="message bot-message">
+                <strong>音樂精靈：</strong> 歡迎使用展場版問答精靈，請在下方輸入提問！
+              </div>
+            </div>
+          </div>
+          <div class="suggested-prompts mt-2" id="suggestedPrompts"></div>
+          <form id="questionForm" class="input-group mt-3" autocomplete="off">
+            <input
+              type="text"
+              id="questionInput"
+              class="form-control"
+              placeholder="請輸入您的問題..."
+              required
+            />
+            <button id="sendButton" class="btn btn-primary" type="submit">
+              <i class="fas fa-paper-plane me-1"></i> 提問
+            </button>
+          </form>
+        </div>
+      </div>
+      <footer class="text-center mt-4 mb-4">
+        <span class="text-muted">
+          Kiosk powered by Electron v<span id="electronVersion">-</span>
+        </span>
+      </footer>
+    </div>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>
