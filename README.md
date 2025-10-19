@@ -1,6 +1,6 @@
 # 🎵 Music-ChatBot-web-ui
 
-一個問答聊天機器人 Web 介面，提供直觀易用的對話體驗和豐富的互動功能。
+一個問答聊天機器人 Python flask Web 介面，提供直觀易用的對話體驗和豐富的互動功能。
 
 ![GitHub stars](https://img.shields.io/github/stars/ian20040409/Music-ChatBot-web-ui)
 ![GitHub forks](https://img.shields.io/github/forks/ian20040409/Music-ChatBot-web-ui)
