@@ -172,7 +172,7 @@ function addMessageToChat(content, sender) {
   wrapper.classList.add('message-wrapper', sender === 'user' ? 'user' : 'bot');
   const msg = document.createElement('div');
   msg.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
-  const prefix = sender === 'user' ? '<strong>你：</strong> ' : '<strong>音樂精靈：</strong> ';
+  const prefix = sender === 'user' ? '<strong>你：</strong> ' : '<strong>AI&thinsp;精靈：</strong> ';
   msg.innerHTML = prefix + content;
   wrapper.appendChild(msg);
   chatArea.appendChild(wrapper);
@@ -189,7 +189,7 @@ function typeMessage(content, sender, delay = 50) {
   chatArea.appendChild(wrapper);
   chatArea.scrollTop = chatArea.scrollHeight;
 
-  const prefix = sender === 'user' ? '<strong>你：</strong> ' : '<strong>音樂精靈：</strong> ';
+  const prefix = sender === 'user' ? '<strong>你：</strong> ' : '<strong>AI&thinsp;精靈：</strong> ';
   let i = 0;
   function step() {
     if (i <= content.length) {
@@ -227,7 +227,7 @@ async function askQuestion() {
 
   const loading = document.createElement('div');
   loading.innerHTML = `<div class="message-wrapper bot"><div class="message bot-message">
-    音樂精靈正在思考... <div class="spinner-grow spinner-grow-sm text-primary" role="status"></div>
+    AI&thinsp;精靈正在思考... <div class="spinner-grow spinner-grow-sm text-primary" role="status"></div>
   </div></div>`;
   chatArea.appendChild(loading);
   chatArea.scrollTop = chatArea.scrollHeight;
@@ -295,6 +295,53 @@ defaultPrompts.forEach(text => {
   suggestedPromptsDiv.appendChild(btn);
 });
 
+// 建議提示詞橫向捲動提示：依內容寬度決定是否顯示陰影與箭頭
+const suggestedPromptsWrapper = document.querySelector('.suggested-prompts-wrapper');
+const leftIndicator = suggestedPromptsWrapper ? suggestedPromptsWrapper.querySelector('.scroll-indicator.left') : null;
+const rightIndicator = suggestedPromptsWrapper ? suggestedPromptsWrapper.querySelector('.scroll-indicator.right') : null;
+
+function refreshSuggestedScrollHint() {
+  if (!suggestedPromptsDiv || !suggestedPromptsWrapper) return;
+  const hasOverflow = suggestedPromptsDiv.scrollWidth > suggestedPromptsDiv.clientWidth + 1;
+  const atStart = suggestedPromptsDiv.scrollLeft <= 1;
+  const atEnd = suggestedPromptsDiv.scrollLeft + suggestedPromptsDiv.clientWidth >= suggestedPromptsDiv.scrollWidth - 1;
+
+  // 控制左右箭頭顯示
+  if (leftIndicator) leftIndicator.classList.toggle('show', hasOverflow && !atStart);
+  if (rightIndicator) rightIndicator.classList.toggle('show', hasOverflow && !atEnd);
+}
+
+if (suggestedPromptsWrapper) {
+  suggestedPromptsDiv.addEventListener('scroll', refreshSuggestedScrollHint);
+  window.addEventListener('resize', refreshSuggestedScrollHint);
+
+  // 綁定左右箭頭點擊事件
+  const doScroll = (dir) => {
+    const scrollAmount = Math.round(suggestedPromptsDiv.clientWidth * 0.7);
+    suggestedPromptsDiv.scrollBy({
+      left: dir * scrollAmount,
+      behavior: 'smooth'
+    });
+  };
+  leftIndicator?.addEventListener('click', (e) => {
+    e.preventDefault();
+    doScroll(-1);
+  });
+  rightIndicator?.addEventListener('click', (e) => {
+    e.preventDefault();
+    doScroll(1);
+  });
+
+  // 初始計算一次 + 動態新增按鈕時更新
+  const observer = new MutationObserver(() => {
+    refreshSuggestedScrollHint();
+  });
+  observer.observe(suggestedPromptsDiv, { childList: true });
+
+  // 初次呼叫
+  requestAnimationFrame(refreshSuggestedScrollHint);
+}
+
 // 事件綁定
 sendButton.addEventListener('click', () => {
   clickSound.currentTime = 0; clickSound.play();
@@ -357,6 +404,38 @@ document.addEventListener('DOMContentLoaded', () => {
       maxTokensValue.textContent = '256';
     }
   });
+
+  // 手機版 QA 模式下拉選單：同步到原本的 radio
+  const qaTypeDropdownLabel = document.getElementById('qaTypeDropdownLabel');
+  const qaTypeDropdownMenu = document.getElementById('qaTypeDropdownMenu');
+
+  if (qaTypeDropdownLabel && qaTypeDropdownMenu) {
+    // 初始化：用目前被選取的 radio 文字更新下拉按鈕
+    const checked = document.querySelector('input[name="qaType"]:checked');
+    if (checked) {
+      const checkedLabel = document.querySelector(`label[for="${checked.id}"]`);
+      if (checkedLabel) {
+        qaTypeDropdownLabel.textContent = checkedLabel.innerText.trim();
+      }
+    }
+
+    // 點擊下拉選單項目時，切換對應 radio
+    qaTypeDropdownMenu.querySelectorAll('.dropdown-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (item.classList.contains('disabled')) return;
+
+        const value = item.dataset.value;
+        const targetRadio = document.querySelector(`input[name="qaType"][value="${value}"]`);
+        if (!targetRadio) return;
+
+        targetRadio.checked = true;
+        targetRadio.dispatchEvent(new Event('change', { bubbles: true }));
+
+        qaTypeDropdownLabel.textContent = item.textContent.trim();
+      });
+    });
+  }
 
   // 快速預設配置按鈕
   document.getElementById('conservativePreset').addEventListener('click', () => {
