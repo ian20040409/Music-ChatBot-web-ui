@@ -119,7 +119,7 @@ function addMessageToChat(content, sender) {
   wrapper.classList.add('message-wrapper', sender === 'user' ? 'user' : 'bot');
   const msg = document.createElement('div');
   msg.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
-  const prefix = sender === 'user' ? '<strong>你：</strong> ' : '<strong>音樂精靈：</strong> ';
+  const prefix = sender === 'user' ? '<strong>你：</strong> ' : '<strong>AI&thinsp;精靈：</strong> ';
   msg.innerHTML = prefix + content;
   wrapper.appendChild(msg);
   chatArea.appendChild(wrapper);
@@ -136,7 +136,7 @@ function typeMessage(content, sender, delay = 50) {
   chatArea.appendChild(wrapper);
   chatArea.scrollTop = chatArea.scrollHeight;
 
-  const prefix = sender === 'user' ? '<strong>你：</strong> ' : '<strong>音樂精靈：</strong> ';
+  const prefix = sender === 'user' ? '<strong>你：</strong> ' : '<strong>AI&thinsp;精靈：</strong> ';
   let i = 0;
   function step() {
     if (i <= content.length) {
@@ -169,7 +169,7 @@ async function askQuestion() {
 
   const loading = document.createElement('div');
   loading.innerHTML = `<div class="message-wrapper bot"><div class="message bot-message">
-    音樂精靈正在思考... <div class="spinner-grow spinner-grow-sm text-primary" role="status"></div>
+    AI&thinsp;精靈正在思考... <div class="spinner-grow spinner-grow-sm text-primary" role="status"></div>
   </div></div>`;
   chatArea.appendChild(loading);
   chatArea.scrollTop = chatArea.scrollHeight;
