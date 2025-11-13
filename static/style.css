@@ -556,10 +556,14 @@ body.thinking::before {
 
   body {
     margin: 0 !important;
-    padding: 0 !important;
+    padding-top: calc(env(safe-area-inset-top, 0px) + 1rem);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.85rem);
+    padding-left: calc(env(safe-area-inset-left, 0px) + 0.85rem);
+    padding-right: calc(env(safe-area-inset-right, 0px) + 0.85rem);
     display: block !important;
     overflow-x: hidden;
     overflow-y: auto; /* 手機頁面可以向下捲動 */
+    box-sizing: border-box;
   }
 
   /* 手機版隱藏整個標題列（header） */
@@ -575,8 +579,8 @@ body.thinking::before {
 
   /* 最外層容器：佔滿整個畫面 */
   .chat-container-wrapper {
-    width: 100vw !important;
-    min-height: 100dvh;
+    width: 100% !important;
+    min-height: calc(100dvh - (env(safe-area-inset-top, 0px) + 1rem) - (env(safe-area-inset-bottom, 0px) + 0.85rem));
     height: auto;
     max-height: none;
     margin: 0;
