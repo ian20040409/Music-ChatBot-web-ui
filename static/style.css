@@ -360,7 +360,7 @@ html {
   }
   .message.user-message {
     background:#667eea;color:#fff;
-    border-radius:18px 25px 3px 25px; /* sharper bottom-right, softer elsewhere */
+    border-radius:33px 25px 3px 33px; /* sharper bottom-right, softer elsewhere */
     border-color:rgba(255,255,255,0.35);
   }
   .message.bot-message {
