@@ -66,8 +66,124 @@ html {
   .mobile-top-bar {
     display: none !important;
   }
+
+  /* 手機頂部動作按鈕：圓潤漸層 + 浮光陰影 */
+  .mobile-top-bar .dropdown-toggle,
+  .mobile-top-bar .mobile-style-btn {
+    border-radius: 999px;
+    border: none;
+    padding: 0.65rem 1rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: #fff;
+    background: linear-gradient(135deg, #4b7bec, #8c54ff);
+    box-shadow: 0 12px 30px rgba(76, 81, 191, 0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  }
+  .mobile-top-bar .dropdown-toggle::after {
+    margin-left: 0.6rem;
+    vertical-align: middle;
+  }
+  .mobile-top-bar .dropdown-toggle:hover,
+  .mobile-top-bar .mobile-style-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 18px 35px rgba(76, 81, 191, 0.45);
+    filter: brightness(1.05);
+  }
+  .mobile-top-bar .dropdown-toggle:focus,
+  .mobile-top-bar .mobile-style-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.35);
+  }
+
+  /* 下拉選單：玻璃擬態效果 */
+  .mobile-top-bar .dropdown-menu {
+    border: none;
+    border-radius: 20px;
+    padding: 0.4rem;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 25px 45px rgba(15, 18, 36, 0.18);
+  }
+  .mobile-top-bar .dropdown-item {
+    border-radius: 14px;
+    font-weight: 500;
+    color: #2b2f3c;
+    padding: 0.55rem 0.9rem;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .mobile-top-bar .dropdown-item:hover,
+  .mobile-top-bar .dropdown-item:focus {
+    background: linear-gradient(135deg, rgba(224, 195, 252, 0.35), rgba(142, 197, 252, 0.5));
+    color: #1c1f2b;
+    transform: translateX(2px);
+    box-shadow: inset 0 0 0 1px rgba(148, 105, 255, 0.3);
+  }
+  .mobile-top-bar .dropdown-item.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
   .qa-type-selector .form-check-input:checked {
     background-color:#667eea;border-color:#667eea;
+  }
+
+  /* 桌機版回答風格按鈕 */
+  .generation-params .btn-secondary {
+    border:none;
+    border-radius:999px;
+    padding:0.65rem 1.6rem;
+    font-weight:600;
+    letter-spacing:0.01em;
+    background:linear-gradient(135deg,#5562ff,#8a3fff);
+    color:#fff;
+    box-shadow:0 15px 32px rgba(85,98,255,0.35);
+    transition:transform 0.2s ease,box-shadow 0.2s ease,filter 0.2s ease;
+  }
+  .generation-params .btn-secondary:hover {
+    transform:translateY(-1px);
+    filter:brightness(1.05);
+    box-shadow:0 22px 40px rgba(85,98,255,0.45);
+  }
+  .generation-params .btn-secondary:focus-visible {
+    outline:none;
+    box-shadow:0 0 0 3px rgba(102,126,234,0.35);
+  }
+
+  /* 驗證按鈕 */
+  #startVerifyBtn {
+    border:none;
+    border-radius:999px;
+    padding:0.6rem 1.4rem;
+    background:linear-gradient(135deg,#ffb347,#ff714a);
+    color:#fff;
+    font-weight:600;
+    letter-spacing:0.01em;
+    box-shadow:0 15px 35px rgba(255,113,74,0.35);
+    cursor:pointer;
+    transition:transform 0.2s ease,box-shadow 0.2s ease,filter 0.2s ease;
+    display:inline-flex;
+    align-items:center;
+    gap:0.35rem;
+    align-self:center;
+    margin:0.5rem auto;
+  }
+  #startVerifyBtn::before {
+    content:"";
+    width:0.65rem;
+    height:0.65rem;
+    border-radius:50%;
+    background:#fff;
+    box-shadow:0 0 12px rgba(255,255,255,0.9);
+  }
+  #startVerifyBtn:hover {
+    transform:translateY(-1px);
+    filter:brightness(1.05);
+    box-shadow:0 22px 42px rgba(255,113,74,0.45);
+  }
+  #startVerifyBtn:focus-visible {
+    outline:none;
+    box-shadow:0 0 0 3px rgba(255,147,79,0.35);
   }
   
   /* 輸入群組 */
@@ -202,46 +318,64 @@ html {
   .user-message + .message-timestamp { text-align:right; }
   .bot-message + .message-timestamp { text-align:left; }
 
-  /* 進階設定 Modal 淺色模式樣式 */
-  #paramsModal .btn-outline-success {
-    background:#28a745;border-color:#28a745;color:#fff;
+  /* 進階設定 Modal 按鈕樣式（淺色模式） */
+  #paramsModal .btn {
+    border-radius:999px;
+    border:none;
+    font-weight:600;
+    padding:0.6rem 1.25rem;
+    letter-spacing:0.01em;
+    transition:transform 0.2s ease,box-shadow 0.2s ease,filter 0.2s ease;
   }
-  #paramsModal .btn-outline-success:hover {
-    background:#218838;border-color:#1e7e34;
+  #paramsModal .btn:focus-visible {
+    outline:none;
+    box-shadow:0 0 0 3px rgba(102,126,234,0.35);
+  }
+
+  #paramsModal .btn-outline-success,
+  #paramsModal .btn-success {
+    background:linear-gradient(135deg,#1dd1a1,#10ac84);
+    color:#fff;
+    box-shadow:0 15px 35px rgba(16,172,132,0.35);
+  }
+  #paramsModal .btn-outline-success:hover,
+  #paramsModal .btn-success:hover {
     transform:translateY(-1px);
-    box-shadow:0 6px 20px rgba(40,167,69,0.3);
+    filter:brightness(1.03);
+    box-shadow:0 20px 40px rgba(16,172,132,0.45);
   }
 
   #paramsModal .btn-outline-primary {
-    background:#667eea;border-color:#667eea;color:#fff;
+    background:linear-gradient(135deg,#8d50ff,#5f8bff);
+    color:#fff;
+    box-shadow:0 15px 35px rgba(102,126,234,0.35);
   }
   #paramsModal .btn-outline-primary:hover {
-    background:#5a6fd0;border-color:#5a6fd0;
     transform:translateY(-1px);
-    box-shadow:0 6px 20px rgba(102,126,234,0.3);
+    filter:brightness(1.05);
+    box-shadow:0 20px 42px rgba(102,126,234,0.45);
   }
 
   #paramsModal .btn-outline-warning {
-    background:#ff8c00;border-color:#ff8c00;color:#fff;
+    background:linear-gradient(135deg,#ff9a3c,#ff6f61);
+    color:#fff;
+    box-shadow:0 15px 35px rgba(255,140,0,0.35);
   }
   #paramsModal .btn-outline-warning:hover {
-    background:#e07600;border-color:#cc6900;
     transform:translateY(-1px);
-    box-shadow:0 6px 20px rgba(255,140,0,0.4);
+    filter:brightness(1.05);
+    box-shadow:0 20px 42px rgba(255,140,0,0.45);
   }
 
   #paramsModal .btn-outline-secondary {
-    background:#6c757d;border-color:#6c757d;color:#fff;
+    background:linear-gradient(135deg,#9ba4b5,#6b7382);
+    color:#fff;
+    box-shadow:0 15px 35px rgba(107,115,130,0.35);
   }
   #paramsModal .btn-outline-secondary:hover {
-    background:#5a6268;border-color:#545b62;
     transform:translateY(-1px);
-    box-shadow:0 6px 20px rgba(108,117,125,0.3);
-  }
-
-  #paramsModal .btn-success:hover {
-    transform:translateY(-1px);
-    box-shadow:0 6px 20px rgba(40,167,69,0.3);
+    filter:brightness(1.04);
+    box-shadow:0 20px 40px rgba(107,115,130,0.45);
   }
 
   /* Modal 整體樣式 */
@@ -573,6 +707,45 @@ body.thinking::before {
       background:#0b3a8c;border-color:#0b3a8c;
       box-shadow:0 6px 20px rgba(0,0,0,0.7);
     }
+
+    .generation-params .btn-secondary {
+      background:linear-gradient(135deg,#343d94,#5c2d95);
+      box-shadow:0 18px 40px rgba(0,0,0,0.55);
+    }
+    .generation-params .btn-secondary:hover {
+      box-shadow:0 24px 48px rgba(0,0,0,0.65);
+    }
+
+    #startVerifyBtn {
+      background:linear-gradient(135deg,#ff9f43,#f368e0);
+      box-shadow:0 18px 42px rgba(0,0,0,0.6);
+    }
+    #startVerifyBtn::before {
+      background:#ffe0c2;
+      box-shadow:0 0 12px rgba(255,224,194,0.85);
+    }
+    #startVerifyBtn:hover {
+      box-shadow:0 24px 52px rgba(0,0,0,0.7);
+    }
+
+    .mobile-top-bar .dropdown-toggle,
+    .mobile-top-bar .mobile-style-btn {
+      background:linear-gradient(135deg,#1b1d3a,#3d2c6f);
+      box-shadow:0 14px 32px rgba(0,0,0,0.55);
+    }
+    .mobile-top-bar .dropdown-menu {
+      background:rgba(18,20,35,0.92);
+      box-shadow:0 18px 40px rgba(0,0,0,0.65);
+    }
+    .mobile-top-bar .dropdown-item {
+      color:#e5e7ff;
+    }
+    .mobile-top-bar .dropdown-item:hover,
+    .mobile-top-bar .dropdown-item:focus {
+      color:#fff;
+      background:linear-gradient(135deg,rgba(103,126,234,0.4),rgba(129,140,248,0.4));
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,0.08);
+    }
   
     /* 深色下建議提示詞 Hover */
     .suggested-prompts button:hover {
@@ -651,6 +824,56 @@ body.thinking::before {
     }
 
     /* 進階設定 Modal 深色優化 */
+    #paramsModal .btn {
+      border-radius:999px;
+      border:none;
+      font-weight:600;
+      padding:0.6rem 1.25rem;
+      box-shadow:0 14px 32px rgba(0,0,0,0.55);
+    }
+    #paramsModal .btn:focus-visible {
+      box-shadow:0 0 0 3px rgba(13,71,161,0.45);
+    }
+
+    #paramsModal .btn-outline-success,
+    #paramsModal .btn-success {
+      background:linear-gradient(135deg,#0f9d58,#0b8043);
+      color:#fff;
+      box-shadow:0 18px 38px rgba(0,0,0,0.55);
+    }
+    #paramsModal .btn-outline-success:hover,
+    #paramsModal .btn-success:hover {
+      filter:brightness(1.03);
+      box-shadow:0 22px 46px rgba(0,0,0,0.65);
+    }
+
+    #paramsModal .btn-outline-primary {
+      background:linear-gradient(135deg,#1e3a8a,#0d47a1);
+      color:#fff;
+    }
+    #paramsModal .btn-outline-primary:hover {
+      filter:brightness(1.05);
+      box-shadow:0 22px 46px rgba(0,0,0,0.7);
+    }
+
+    #paramsModal .btn-outline-warning {
+      background:linear-gradient(135deg,#b85b16,#d97706);
+      color:#fff;
+    }
+    #paramsModal .btn-outline-warning:hover {
+      filter:brightness(1.05);
+      box-shadow:0 22px 46px rgba(0,0,0,0.7);
+    }
+
+    #paramsModal .btn-outline-secondary {
+      background:linear-gradient(135deg,#4a5568,#2d3748);
+      color:#e5e7ff;
+    }
+    #paramsModal .btn-outline-secondary:hover {
+      filter:brightness(1.04);
+      box-shadow:0 22px 46px rgba(0,0,0,0.65);
+    }
+
     #paramsModal .modal-content {
       background:#1e1e1e !important;color:#e0e0e0 !important;border:none;
       box-shadow: 0 8px 24px rgba(0,0,0,0.8);
@@ -721,47 +944,6 @@ body.thinking::before {
       width:20px;
       cursor:pointer;
       box-shadow:0 2px 6px rgba(0,0,0,0.3);
-    }
-
-    /* 進階設定按鈕樣式 - 深色模式 */
-    #paramsModal .btn-outline-success {
-      background:#28a745;border-color:#28a745;color:#fff;
-    }
-    #paramsModal .btn-outline-success:hover {
-      background:#218838;border-color:#1e7e34;
-      box-shadow:0 4px 12px rgba(40,167,69,0.4);
-    }
-
-    #paramsModal .btn-outline-primary {
-      background:#0d47a1;border-color:#0d47a1;color:#fff;
-    }
-    #paramsModal .btn-outline-primary:hover {
-      background:#0b3a8c;border-color:#0a3378;
-      box-shadow:0 4px 12px rgba(13,71,161,0.4);
-    }
-
-    #paramsModal .btn-outline-warning {
-      background:#ff8c00;border-color:#ff8c00;color:#fff;
-    }
-    #paramsModal .btn-outline-warning:hover {
-      background:#e07600;border-color:#cc6900;
-      box-shadow:0 4px 12px rgba(255,140,0,0.4);
-    }
-
-    #paramsModal .btn-outline-secondary {
-      background:#6c757d;border-color:#6c757d;color:#fff;
-    }
-    #paramsModal .btn-outline-secondary:hover {
-      background:#5a6268;border-color:#545b62;
-      box-shadow:0 4px 12px rgba(108,117,125,0.4);
-    }
-
-    #paramsModal .btn-success {
-      background:#28a745;border-color:#28a745;
-    }
-    #paramsModal .btn-success:hover {
-      background:#218838;border-color:#1e7e34;
-      box-shadow:0 4px 12px rgba(40,167,69,0.4);
     }
 
     /* 卡片樣式 - 深色模式 */
