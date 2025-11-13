@@ -27,7 +27,7 @@ html {
    ============================== */
    body {
     font-family: 'Poppins','Noto Sans TC',sans-serif;
-    background: linear-gradient(135deg,#e0c3fc,#8ec5fc);
+    background: linear-gradient(135deg,#b5bff9,#8ec5fc);
     display:flex;justify-content:center;align-items:center;
     min-height:100vh;padding:1rem;
   }
