@@ -239,11 +239,11 @@ html {
   #sendButton {
     border:none;
     border-radius:0 28px 28px 0;
-    background:linear-gradient(135deg,#ff6f61,#ffb347);
+    background:linear-gradient(135deg,#4a90e2,#667eea);
     color:#fff;
     font-weight:600;
     letter-spacing:0.01em;
-    box-shadow:0 12px 28px rgba(255,111,97,0.35);
+    box-shadow:0 12px 28px rgba(74,144,226,0.35);
     transition:transform 0.2s ease,box-shadow 0.2s ease,filter 0.2s ease;
   }
   #sendButton i {
@@ -252,15 +252,15 @@ html {
   #sendButton:hover:not(:disabled) {
     transform:translateY(-1px);
     filter:brightness(1.05);
-    box-shadow:0 18px 38px rgba(255,111,97,0.45);
+    box-shadow:0 18px 38px rgba(74,144,226,0.45);
   }
   #sendButton:active:not(:disabled) {
     transform:translateY(1px);
-    box-shadow:0 8px 18px rgba(255,111,97,0.35);
+    box-shadow:0 8px 18px rgba(74,144,226,0.35);
   }
   #sendButton:focus-visible {
     outline:none;
-    box-shadow:0 0 0 3px rgba(255,147,79,0.4);
+    box-shadow:0 0 0 3px rgba(102,126,234,0.4);
   }
   #sendButton:disabled {
     background:linear-gradient(135deg,#d1d1d1,#b0b0b0);
@@ -819,7 +819,7 @@ body.thinking::before {
     }
 
     #sendButton {
-      background:linear-gradient(135deg,#ff8f70,#ff3d68);
+      background:linear-gradient(135deg,#3b82f6,#1e40af);
       box-shadow:0 16px 36px rgba(0,0,0,0.6);
       color:#fff;
     }
@@ -827,7 +827,7 @@ body.thinking::before {
       box-shadow:0 22px 48px rgba(0,0,0,0.7);
     }
     #sendButton:focus-visible {
-      box-shadow:0 0 0 3px rgba(255,141,105,0.5);
+      box-shadow:0 0 0 3px rgba(59,130,246,0.5);
     }
     #sendButton:disabled {
       background:linear-gradient(135deg,#4c4c4c,#2f2f2f);
