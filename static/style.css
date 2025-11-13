@@ -187,19 +187,34 @@ html {
   }
   
   /* 輸入群組 */
+  .input-group {
+    border-radius:28px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,0.65);
+    background:rgba(255,255,255,0.98);
+    box-shadow:0 18px 45px rgba(102,126,234,0.15);
+    transition:box-shadow 0.3s ease,border-color 0.25s ease;
+  }
+  .input-group:focus-within {
+    border-color:rgba(102,126,234,0.85);
+    box-shadow:0 22px 55px rgba(102,126,234,0.25);
+  }
   .input-group .form-control {
-    border-radius:10px 0 0 10px;border:1px solid #ced4da;
+    border-radius:28px 0 0 28px;
+    border:none;
+    background:transparent;
     padding:0.9rem 1rem;font-size:1rem;
     transition:box-shadow .15s ease;
   }
   .input-group .form-control:focus {
-    border-color:#667eea;
-    box-shadow:0 0 0 0.25rem rgba(102,126,234,0.25);
+    border-color:transparent;
+    box-shadow:none;
   }
   
   .input-group .btn {
-    border-radius:0 10px 10px 0;
-    background-color:#667eea;border-color:#667eea;
+    border-radius:0 28px 28px 0;
+    border:none;
+    background-color:#667eea;
     padding:0.9rem 1.25rem;font-weight:500;
     transition:transform .15s ease,box-shadow .15s ease;
   }
@@ -217,13 +232,13 @@ html {
     box-shadow:0 0 0 3px rgba(102,126,234,0.5);
   }
   .input-group .btn:disabled {
-    background-color:#adb5bd;border-color:#adb5bd;
+    background-color:#adb5bd;
   }
 
   /* 發送按鈕專屬樣式 */
   #sendButton {
     border:none;
-    border-radius:0 16px 16px 0;
+    border-radius:0 28px 28px 0;
     background:linear-gradient(135deg,#ff6f61,#ffb347);
     color:#fff;
     font-weight:600;
@@ -325,19 +340,35 @@ html {
   .message-wrapper.bot { justify-content:flex-start; }
   
   .message {
-    padding:.8rem 1.2rem;border-radius:15px;
-    max-width:80%;word-wrap:break-word;line-height:1.6;
-    box-shadow:0 2px 5px rgba(0,0,0,0.05);
+    position:relative;
+    padding:.8rem 1.2rem;
+    border-radius:15px;
+    max-width:80%;
+    word-wrap:break-word;
+    line-height:1.6;
+    border:1px solid rgba(255,255,255,0.12);
+    box-shadow:
+      0 10px 25px rgba(17,20,56,0.18),
+      0 2px 6px rgba(17,20,56,0.08);
+    transition:transform .2s ease,box-shadow .2s ease;
+  }
+  .message:hover {
+    transform:translateY(-2px);
+    box-shadow:
+      0 18px 35px rgba(17,20,56,0.25),
+      0 4px 12px rgba(17,20,56,0.12);
   }
   .message.user-message {
     background:#667eea;color:#fff;
-    border-bottom-right-radius:5px;
+    border-radius:18px 25px 3px 25px; /* sharper bottom-right, softer elsewhere */
+    border-color:rgba(255,255,255,0.35);
   }
   .message.bot-message {
     background:#fff;color:#343a40;
-    border:1px solid #e9ecef;border-bottom-left-radius:5px;
+    border:1px solid rgba(102,102,102,0.18);
+    border-radius:18px 25px 25px 3px; /* keep bottom-left (BL) subtle while rounding other corners */
   }
-  .message.user-message strong { color:#e0e0e0; }
+  .message.user-message strong { color:#f5f5f5; }
   .message.bot-message strong { color:#667eea; }
   
   .loading-message,.error-message {
@@ -409,6 +440,22 @@ html {
     transform:translateY(-1px);
     filter:brightness(1.04);
     box-shadow:0 20px 40px rgba(107,115,130,0.45);
+  }
+
+  /* 一鍵風格按鈕群組：保留扁平造型 */
+  #paramsModal .btn-group.w-100 {
+    gap:0.75rem;
+  }
+  #paramsModal .btn-group.w-100 .btn {
+    border-radius:18px;
+    padding:0.85rem 0.9rem;
+    box-shadow:0 10px 24px rgba(0,0,0,0.15);
+  }
+  #paramsModal .btn-group.w-100 .btn small {
+    display:block;
+    margin-top:0.1rem;
+    font-weight:500;
+    opacity:0.85;
   }
 
   /* Modal 整體樣式 */
@@ -672,9 +719,10 @@ body.thinking::before {
   /* 輸入區：固定在底部，不跟 chat-area 搶高度 */
   .input-group {
     flex: 0 0 auto;
-    padding: 0.4rem 0.25rem;
-    padding-bottom: calc(env(safe-area-inset-bottom, 0.5rem) + 0.6rem);
-    margin-bottom: 0;
+    padding: 0;
+    margin: 0.4rem 0.25rem;
+    margin-bottom: calc(env(safe-area-inset-bottom, 0.5rem) + 0.6rem);
+    border-radius:24px;
   }
 
   .input-group .form-control {
@@ -725,6 +773,15 @@ body.thinking::before {
     }
     .qa-type-selector .form-check-label { color:#ddd; }
   
+    .input-group {
+      background:rgba(12,14,24,0.92);
+      border:1px solid rgba(255,255,255,0.08);
+      box-shadow:0 18px 40px rgba(0,0,0,0.75);
+    }
+    .input-group:focus-within {
+      border-color:rgba(102,126,234,0.6);
+      box-shadow:0 24px 55px rgba(0,0,0,0.85);
+    }
     .input-group .form-control {
       background:#2b2b2b;border-color:#555;color:#eee;
     }
@@ -847,13 +904,23 @@ body.thinking::before {
     .chat-area::-webkit-scrollbar-thumb { background:#555; }
     .chat-area::-webkit-scrollbar-thumb:hover { background:#666; }
   
+    .message {
+      border-color:rgba(255,255,255,0.08);
+      box-shadow:
+        0 12px 30px rgba(0,0,0,0.55),
+        0 3px 8px rgba(0,0,0,0.35);
+    }
+    .message:hover {
+      box-shadow:
+        0 20px 42px rgba(0,0,0,0.65),
+        0 6px 16px rgba(0,0,0,0.4);
+    }
     .message.user-message {
       background:#0d47a1;color:#fff;
-      box-shadow:0 4px 12px rgba(0,0,0,0.7);
+      border-color:rgba(255,255,255,0.18);
     }
     .message.bot-message {
       background:#2c3e50;color:#ddd;border-color:#444;
-      box-shadow:0 4px 12px rgba(0,0,0,0.7);
     }
   
     footer a.text-muted { color:#fff !important; }
@@ -922,6 +989,17 @@ body.thinking::before {
     #paramsModal .btn-outline-secondary:hover {
       filter:brightness(1.04);
       box-shadow:0 22px 46px rgba(0,0,0,0.65);
+    }
+
+    #paramsModal .btn-group.w-100 {
+      gap:0.6rem;
+    }
+    #paramsModal .btn-group.w-100 .btn {
+      border-radius:16px;
+      box-shadow:0 16px 32px rgba(0,0,0,0.65);
+    }
+    #paramsModal .btn-group.w-100 .btn small {
+      color:rgba(255,255,255,0.9);
     }
 
     #paramsModal .modal-content {
