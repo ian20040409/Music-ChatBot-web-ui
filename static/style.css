@@ -348,17 +348,29 @@ html {
   .message-wrapper.bot { justify-content:flex-start; }
   
   .message {
-    padding:.8rem 1.2rem;border-radius:15px;
+    padding:.8rem 1.2rem;border-radius:27px;
     max-width:80%;word-wrap:break-word;line-height:1.6;
-    box-shadow:0 2px 5px rgba(0,0,0,0.05);
+    transition:transform 0.2s ease,box-shadow 0.2s ease,filter 0.2s ease;
   }
   .message.user-message {
     background:#667eea;color:#fff;
     border-bottom-right-radius:5px;
+    box-shadow:0 12px 30px rgba(102,126,234,0.35);
   }
   .message.bot-message {
     background:#fff;color:#343a40;
     border:1px solid #e9ecef;border-bottom-left-radius:5px;
+    box-shadow:0 12px 30px rgba(148,163,184,0.35);
+  }
+  .message.user-message:hover {
+    filter:brightness(1.05);
+    transform:translateY(-1px);
+    box-shadow:0 18px 40px rgba(102,126,234,0.45);
+  }
+  .message.bot-message:hover {
+    filter:brightness(1.02);
+    transform:translateY(-1px);
+    box-shadow:0 18px 40px rgba(148,163,184,0.45);
   }
   .message.user-message strong { color:#e0e0e0; }
   .message.bot-message strong { color:#667eea; }
