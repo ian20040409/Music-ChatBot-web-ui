@@ -223,7 +223,7 @@ async function askQuestion() {
   addMessageToChat(question, 'user');
   questionInput.value = '';
   sendButton.disabled = true;
-  sendButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> 發送中...';
+  sendButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span>';
 
   const loading = document.createElement('div');
   loading.innerHTML = `<div class="message-wrapper bot"><div class="message bot-message">
@@ -275,7 +275,7 @@ async function askQuestion() {
     clearInterval(interval);
     document.body.classList.remove('thinking');
     sendButton.disabled = false;
-    sendButton.innerHTML = '<i class="fas fa-paper-plane me-1"></i> 發送';
+    sendButton.innerHTML = '<i class="fas fa-solid fa-arrow-up"></i>';
     questionInput.focus();
   }
 }
